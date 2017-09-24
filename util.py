@@ -22,7 +22,7 @@ class ChannelBD(list):
         """Keyword arguments:
         channelId -- channel ID, Format: <#000000000000000000>
         serverId -- server ID, Format: 000000000000000000"""
-        self.serverId = serverId
+        self.serverId = serverId # Already a "pure" id
         self.channelId = channelId
 
     def ObtainPureChannelID(self):
@@ -41,7 +41,7 @@ def ObtainEmojiWithName(p_EmojiList, p_name : str):
     for emoji in p_EmojiList:
         if emoji.name == p_name:
             return emoji
-    return "octagonal_sign" #If the bot ever uses this, that means I typed the name wrong
+    return "octagonal_sign" # If the bot ever uses this, that means I typed the name wrong
 
 def ObtainHighestMemberName(p_MemberList):
     """Returns the length of the longest Member.name in the MemberList.
@@ -54,6 +54,36 @@ def ObtainHighestMemberName(p_MemberList):
         if nameLength > length:
             length = nameLength
     return length
+
+def ObtainChannelInfo(p_ChannelList, p_id : str, p_mode : "ch"):
+    """Obtains Information from a channel.
+    
+    Keyword arguments:
+    p_ChannelList -- channel list
+    p_id -- channel.id
+    p_mode -- different mode returns different objects
+
+    Modes:
+    ch - Returns a Channel (DEFAULT)
+    id - Returns a Channel.id
+    na - Returns a Channel.name
+    Returns -1 and notifies you in console if the mode is wrongly entered."""
+    # Checks the list for the channel with the "p_id"
+    if p_mode == "ch":
+        for channel in p_ChannelList:
+            if channel.id == p_id:
+                return channel # Returns a Channel object
+    elif p_mode == "id": # This is a verification
+        for channel in p_ChannelList:
+            if channel.id == p_id:
+                return channel.id # Returns the id
+    elif p_mode == "na":
+        for channel in p_ChannelList:
+            if channel.id == p_id:
+                return channel.name # Returns the name
+    else:
+        print("{} MODE DOESN'T EXIST (ObtainChannelInfo)".format(p_mode))
+        return "-1"
 
 def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb"):
     """Obtains Information from a member.
@@ -69,23 +99,23 @@ def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb"):
     na - Returns a Member.name
     nl - Returns the length of Member.name
     Returns -1 and notifies you in console if the mode is wrongly entered."""
-    #Checks the list for the member with the "p_id"
+    # Checks the list for the member with the "p_id"
     if p_mode == "mb":
         for member in p_MemberList:
             if member.id == p_id:
-                return member #Returns a Member object
-    elif p_mode == "id": #This is a verification
+                return member # Returns a Member object
+    elif p_mode == "id": # This is a verification
         for member in p_MemberList:
             if member.id == p_id:
-                return member.id #Returns the id
+                return member.id # Returns the id
     elif p_mode == "na":
         for member in p_MemberList:
             if member.id == p_id:
-                return member.name #Returns the name
+                return member.name # Returns the name
     elif p_mode == "nl":
         for member in p_MemberList:
             if member.id == p_id:
-                return len(member.name) #Returns the length of the name
+                return len(member.name) # Returns the length of the name
     else:
         print("{} MODE DOESN'T EXIST (ObtainMemberInfo)".format(p_mode))
         return "-1"
@@ -106,26 +136,44 @@ def IsUserIdValid(p_MemberList, p_userId : str):
             return True
     return False
 
+def IsChannelIdValid(p_ChannelList, p_channelId : str):
+    """True = Valid
+    False = Not valid
+    ChannelId is valid if : It starts with '<#', ends with '>' and has 18
+    numbers in between.
+    
+    Keyword arguments:
+    p_ChannelList -- channel list
+    p_channelId -- channel.id"""
+    p_channelId = str(p_channelId)
+    numberId = p_channelId[2:20]
+    if p_channelId.startswith("<#") and p_channelId.endswith(">") and numberId.isdigit():
+        if numberId == ObtainChannelInfo(p_ChannelList, numberId, "id"):
+            return True
+    return False
+
 #####################
 # FILE MANIPULATION #
 #####################
-def FileExtractBD(p_userBDList):
-    """Extracts the content of data.txt 
+
+#FileUserBD_START
+def FileExtractUserBD(p_userBDList):
+    """Extracts the content of dataUserBD.txt 
     and puts it in the list.
     
     Keyword arguments:
     p_userBDList -- userBd list"""
     with open(FileNameUserBD(), 'r') as file:
         del p_userBDList[:]
-        content = file.readlines() #Copies every line in this variable, which is a list
-        content = [x.strip("\n") for x in content] #Removes \n from these lines
+        content = file.readlines() # Copies every line in this variable, which is a list
+        content = [x.strip("\n") for x in content] #R emoves \n from these lines
         for line in content:
-            lineBD = line.split('|') #Seperates userId and bd
+            lineBD = line.split('|') # Seperates userId and bd
             p_userBDList.append(UserBD(lineBD[0], lineBD[1]))
 
-def FileRemoveBD(p_userBDList, p_listIndex : int):
+def FileRemoveUserBD(p_userBDList, p_listIndex : int):
     """Removes the content of the list at index
-    and writes the list in data.txt.
+    and writes the list in dataUserBD.txt.
     
     Keyword arguments:
     p_userBDList -- userBd list
@@ -141,9 +189,9 @@ def FileRemoveBD(p_userBDList, p_listIndex : int):
             index += 1
     print("List of UserBD has been updated. A UserBD has been removed.")
 
-def FileAddBD(p_userBDList, p_userId : str, p_bd : str):
+def FileAddUserBD(p_userBDList, p_userId : str, p_bd : str):
     """Adds the user id and bd to the list
-    and writes it in data.txt.
+    and writes it in dataUserBD.txt.
     
     Keyword arguments:
     p_userBDList -- userBd list
@@ -153,3 +201,51 @@ def FileAddBD(p_userBDList, p_userId : str, p_bd : str):
     with open(FileNameUserBD(), 'a') as file:
         file.write("\n{}|{}".format(p_userId, p_bd))
     print("List of UserBD has been updated. A UserBD has been added.")
+#FileUserBD_END
+
+#FileChannelBD_START
+def FileExtractChannelBD(p_channelBDList):
+    """Extracts the content of dataChannelBD.txt 
+    and puts it in the list.
+    
+    Keyword arguments:
+    p_channelBDList -- channelBd list"""
+    with open(FileNameChannelBD(), 'r') as file:
+        del p_channelBDList[:]
+        content = file.readlines()
+        content = [x.strip("\n") for x in content]
+        for line in content:
+            lineBD = line.split('|') 
+            p_channelBDList.append(ChannelBD(lineBD[0], lineBD[1]))
+
+def FileRemoveChannelBD(p_channelBDList, p_listIndex : int):
+    """Removes the content of the list at index
+    and writes the list in dataChannelBD.txt.
+    
+    Keyword arguments:
+    p_channelBDList -- channelBd list
+    p_listIndex -- remove object at index"""
+    del p_channelBDList[p_listIndex]
+    with open(FileNameChannelBD(), 'w') as file:
+        index = 0
+        for channelBd in p_channelBDList:
+            if index == 0:
+                file.write("{}|{}".format(channelBd.channelId, channelBd.serverId))
+            else:
+                file.write("\n{}|{}".format(channelBd.channelId, channelBd.serverId))
+            index += 1
+    print("List of ChannelBD has been updated. A ChannelBD has been removed.")
+
+def FileAddChannelBD(p_channelBDList, p_channelId : str, p_serverId : str):
+    """Adds the channel id and server id to the list
+    and writes it in dataChannelBD.txt.
+    
+    Keyword arguments:
+    p_channelBDList -- channelBd list
+    p_channelId -- channel id
+    p_serverId -- server id"""
+    p_channelBDList.append(ChannelBD(p_channelId, p_serverId))
+    with open(FileNameChannelBD(), 'a') as file:
+        file.write("\n{}|{}".format(p_channelId, p_serverId))
+    print("List of ChannelBD has been updated. A ChannelBD has been added.")
+#FileChannelBD_END
