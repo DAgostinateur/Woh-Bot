@@ -1,34 +1,26 @@
 """Tools for Woh_Bot_Main.py"""
 import discord
+import re
 from hidden import *
 
 class UserBD(list):
     """A UserBD is made of an id from a user and his/her birthday date."""
     def __init__(self, userId, bd):
         """Keyword arguments:
-        userId -- user ID, Format: <@!000000000000000000>
+        userId -- user ID, Format: 000000000000000000
         bd -- birthday date, Format: mm-dd"""
         self.bd = bd
         self.userId = userId
 
-    def ObtainPureUserID(self):
-        """Obtains the pure id from UserBD.userId.
-        Example: <@!000000000000000000> -> 000000000000000000"""
-        return str(self.userId[3:21])
 
 class ChannelBD(list):
     """A ChannelBD is made of a channel id and a server id."""
-    def __int__(self, channelId, serverId):
+    def __init__(self, channelId, serverId):
         """Keyword arguments:
-        channelId -- channel ID, Format: <#000000000000000000>
+        channelId -- channel ID, Format: 000000000000000000
         serverId -- server ID, Format: 000000000000000000"""
-        self.serverId = serverId # Already a "pure" id
+        self.serverId = serverId
         self.channelId = channelId
-
-    def ObtainPureChannelID(self):
-        """Obtains the pure id from ChannelBD.channelId.
-        Example: <#000000000000000000> -> 000000000000000000"""
-        return str(self.channelId[2:20])
 
 
 def ObtainEmojiWithName(p_EmojiList, p_name : str):
@@ -43,17 +35,6 @@ def ObtainEmojiWithName(p_EmojiList, p_name : str):
             return emoji
     return "octagonal_sign" # If the bot ever uses this, that means I typed the name wrong
 
-def ObtainHighestMemberName(p_MemberList):
-    """Returns the length of the longest Member.name in the MemberList.
-    
-    Keyword arguments:
-    p_MemberList -- member list"""
-    length = 0
-    for member in p_MemberList:
-        nameLength = len(member.name)
-        if nameLength > length:
-            length = nameLength
-    return length
 
 def ObtainChannelInfo(p_ChannelList, p_id : str, p_mode : "ch"):
     """Obtains Information from a channel.
@@ -85,19 +66,22 @@ def ObtainChannelInfo(p_ChannelList, p_id : str, p_mode : "ch"):
         print("{} MODE DOESN'T EXIST (ObtainChannelInfo)".format(p_mode))
         return "-1"
 
-def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb"):
+
+def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb", p_serverId : str):
     """Obtains Information from a member.
     
     Keyword arguments:
     p_MemberList -- member list
     p_id -- member.id
     p_mode -- different mode returns different objects
+    p_serverId -- server id (for 'si' mode)
 
     Modes:
     mb - Returns a Member (DEFAULT)
     id - Returns a Member.id
     na - Returns a Member.name
     nl - Returns the length of Member.name
+    si - Returns a Member.server.id
     Returns -1 and notifies you in console if the mode is wrongly entered."""
     # Checks the list for the member with the "p_id"
     if p_mode == "mb":
@@ -116,40 +100,41 @@ def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb"):
         for member in p_MemberList:
             if member.id == p_id:
                 return len(member.name) # Returns the length of the name
+    elif p_mode == "si":
+        for member in p_MemberList:
+            if member.id == p_id and member.server.id == p_serverId:
+                return member.server.id # Returns the server id of the member.
     else:
         print("{} MODE DOESN'T EXIST (ObtainMemberInfo)".format(p_mode))
         return "-1"
 
+
 def IsUserIdValid(p_MemberList, p_userId : str):
     """True = Valid
     False = Not valid
-    UserId is valid if : It starts with '<@!', ends with '>' and has 18
-    numbers in between.
-    
+    UserId is valid if : It has 18 digits and an existing channel.
+    Accepts only digits.
+
     Keyword arguments:
     p_MemberList -- member list
     p_id -- member.id"""
-    p_userId = str(p_userId)
-    numberId = p_userId[3:21]
-    if p_userId.startswith("<@!") and p_userId.endswith(">") and numberId.isdigit():
-        if numberId == ObtainMemberInfo(p_MemberList, numberId, "id"):
-            return True
+    p_userId = str(re.search("[0-9]{18}", p_userId))
+    if len(p_userId) == 18 and p_userId == ObtainMemberInfo(p_MemberList, p_userId, "id"):
+        return True
     return False
+
 
 def IsChannelIdValid(p_ChannelList, p_channelId : str):
     """True = Valid
     False = Not valid
-    ChannelId is valid if : It starts with '<#', ends with '>' and has 18
-    numbers in between.
+    ChannelId is valid if : It has 18 digits and an existing member.
+    Accepts only digits.
     
     Keyword arguments:
     p_ChannelList -- channel list
     p_channelId -- channel.id"""
-    p_channelId = str(p_channelId)
-    numberId = p_channelId[2:20]
-    if p_channelId.startswith("<#") and p_channelId.endswith(">") and numberId.isdigit():
-        if numberId == ObtainChannelInfo(p_ChannelList, numberId, "id"):
-            return True
+    if len(p_channelId) == 18 and p_channelId == ObtainChannelInfo(p_ChannelList, numberId, "id"):
+        return True
     return False
 
 #####################
