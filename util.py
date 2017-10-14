@@ -48,8 +48,8 @@ class UserBD(list):
         """Keyword arguments:
         userId -- user ID, Format: 000000000000000000
         bd -- birthday date, Format: mm-dd"""
-        self.bd = str(bd)
-        self.userId = str(userId)
+        self.bd = bd
+        self.userId = userId
 
 
 class ChannelBD(list):
@@ -58,8 +58,8 @@ class ChannelBD(list):
         """Keyword arguments:
         channelId -- channel ID, Format: 000000000000000000
         serverId -- server ID, Format: 000000000000000000"""
-        self.serverId = str(serverId)
-        self.channelId = str(channelId)
+        self.serverId = serverId
+        self.channelId = channelId
 
 
 
@@ -133,7 +133,7 @@ def ObtainChannelInfo(p_ChannelList, p_id : str, p_mode : "ch"):
         return "-1"
 
 
-def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb", p_serverId : None):
+def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb", p_serverId : ""):
     """Obtains Information from a member.
     
     Keyword arguments:
@@ -184,7 +184,7 @@ def IsUserIdValid(p_MemberList, p_userId : str):
     Keyword arguments:
     p_MemberList -- member list
     p_id -- member.id"""
-    if len(p_userId) == ID_LENGTH and p_userId == ObtainMemberInfo(p_MemberList, p_userId, "id"):
+    if len(p_userId) == ID_LENGTH and p_userId == ObtainMemberInfo(p_MemberList, p_userId, "id", ""):
         return True
     return False
 
@@ -219,7 +219,7 @@ def IsMe(p_userId : str):
     
     Keyword arguments:
     p_userId -- user id"""
-    if message.author.id == MyID():
+    if p_userId == MyID():
         return True
     return False
 
@@ -253,6 +253,8 @@ def FileRemoveUserBD(p_userBDList, p_listIndex : int):
     with open(FileNameUserBD(), 'w') as file:
         index = 0
         for userBd in p_userBDList:
+            if len(p_userBDList) == 0:
+                break
             if index == 0:
                 file.write("{}|{}".format(userBd.userId, userBd.bd))
             else:
@@ -270,7 +272,7 @@ def FileAddUserBD(p_userBDList, p_userId : str, p_bd : str):
     bd -- birthday date"""
     p_userBDList.append(UserBD(p_userId, p_bd))
     with open(FileNameUserBD(), 'a') as file:
-        if len(p_userBDList) == 0:
+        if len(p_userBDList) <= 1:
             file.write("{}|{}".format(p_userId, p_bd))
         else:
             file.write("\n{}|{}".format(p_userId, p_bd))
@@ -303,6 +305,8 @@ def FileRemoveChannelBD(p_channelBDList, p_listIndex : int):
     with open(FileNameChannelBD(), 'w') as file:
         index = 0
         for channelBd in p_channelBDList:
+            if len(p_channelBDList) == 0:
+                break
             if index == 0:
                 file.write("{}|{}".format(channelBd.channelId, channelBd.serverId))
             else:
@@ -320,7 +324,7 @@ def FileAddChannelBD(p_channelBDList, p_channelId : str, p_serverId : str):
     p_serverId -- server id"""
     p_channelBDList.append(ChannelBD(p_channelId, p_serverId))
     with open(FileNameChannelBD(), 'a') as file:
-        if len(p_channelBDList) == 0:
+        if len(p_channelBDList) <= 1:
             file.write("{}|{}".format(p_channelId, p_serverId))
         else:
             file.write("\n{}|{}".format(p_channelId, p_serverId))
@@ -352,6 +356,8 @@ def FileRemoveAdminUser(p_adminUserList, p_listIndex : int):
     with open(FileNameAdminUser(), 'w') as file:
         index = 0
         for adminUser in p_adminUserList:
+            if len(p_adminUserList) == 0:
+                break
             if index == 0:
                 file.write("{}".format(adminUser))
             else:
@@ -368,7 +374,7 @@ def FileAddAdminUser(p_adminUserList, p_adminUser : str):
     adminUser -- adminUser id"""
     p_adminUserList.append(p_adminUser)
     with open(FileNameAdminUser(), 'a') as file:
-        if len(p_adminUserList) == 0:
+        if len(p_adminUserList) <= 1:
             file.write("{}".format(p_adminUser))
         else:
             file.write("\n{}".format(p_adminUser))

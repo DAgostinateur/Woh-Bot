@@ -1,7 +1,7 @@
 import asyncio
-import re
 import platform
 import os
+from re import *
 from sys import exit
 from subprocess import call, Popen
 from datetime import datetime
@@ -132,9 +132,6 @@ async def on_message(message):
         if IsMe(message.author.id): # Owner
             finalHelpMessage += AdminHelpMessage + OwnerHelpMessage
         await client.send_message(message.author, finalHelpMessage)
-
-        if message.server.id == MyServer():
-            await client.delete_message(message)
     #HELP WOH_END
 
     #WOH REACTION_START
@@ -196,8 +193,8 @@ async def on_message(message):
     #BIRTHDAY CHANNEL ADDER_START    
     if message.content.startswith(PREFIX + "addChannelBD") and IsAdminUser(m_AdminUserList, message.author.id):
         if IsAdminUser(m_AdminUserList, message.author.id) or IsMe(message.author.id):
-            command = str(message.content)[14:] # Removes the "!addChannelBD " from the content
-            channelId = str(re.search("[0-9]{18}", command))
+            channelId = str(message.content)[14:] # Removes the "!addChannelBD " from the content
+            channelId = search("[0-9]{18}", channelId).group()
             if not IsChannelIdValid(m_ChannelList, channelId):
                 await client.send_message(message.channel, "**Invalid channel**, make sure you entered a real channel from this server.")
                 return
@@ -231,16 +228,16 @@ async def on_message(message):
             serverId = str(message.server.id)
             if len(m_AdminUserList) != 0:
                 comboList = []
-                for userBd in m_AdminUserList:
-                    if serverId == ObtainMemberInfo(m_MemberList, userBd.userId, "si", serverId):
-                        name = ObtainMemberInfo(m_MemberList, userBd.userId, "na")
-                        comboList.append([name, userBd.bd])
+                for adminUser in m_AdminUserList:
+                    if serverId == ObtainMemberInfo(m_MemberList, adminUser, "si", serverId):
+                        name = ObtainMemberInfo(m_MemberList, adminUser, "na", "")
+                        comboList.append([name])
                     if len(comboList) == 10:
-                        fullMessage = CodeFormat(tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"))
+                        fullMessage = CodeFormat(tabulate(comboList, headers=["Name"], tablefmt="fancy_grid"), "")
                         await client.send_message(message.author, fullMessage)
                         del comboList
                 if len(comboList) != 0 or comboList is not None:
-                    fullMessage = CodeFormat(tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"))
+                    fullMessage = CodeFormat(tabulate(comboList, headers=["Name"], tablefmt="fancy_grid"), "")
                     await client.send_message(message.author, fullMessage)
             else: 
                 await client.send_message(message.author, "The list is empty.")
@@ -248,14 +245,14 @@ async def on_message(message):
     #ADMIN USER ADDER_START
     if message.content.startswith(PREFIX + "addAdminUser"):
         if IsMe(message.author.id):
-            command = str(message.content)[14:] # Removes the "!addAdminUser " from the content
-            userId = str(re.search("[0-9]{18}", command))
+            userId = str(message.content)[14:] # Removes the "!addAdminUser " from the content
+            userId = search("[0-9]{18}", userId).group()
             if not IsUserIdValid(m_MemberList, userId):
                 await client.send_message(message.channel, "**Invalid user**, make sure you entered a real user from this server.")
                 return
 
             for adminUser in m_AdminUserList:
-                if ObtainMemberInfo(m_MemberList, userId, "id") == adminUser:
+                if ObtainMemberInfo(m_MemberList, userId, "id", "") == adminUser:
                     await client.send_message(message.channel, "You're already an admin.")
                     return
                 
@@ -265,15 +262,15 @@ async def on_message(message):
     #ADMIN USER REMOVER_START
     if message.content.startswith(PREFIX + "removeAdminUser"):
         if IsMe(message.author.id):
-            command = str(message.content)[17:] # Removes the "!removeAdminUser " from the content
-            userId = str(re.search("[0-9]{18}", command))
+            userId = str(message.content)[17:] # Removes the "!removeAdminUser " from the content
+            userId = search("[0-9]{18}", userId).group()
             if not IsUserIdValid(m_MemberList, userId):
                 await client.send_message(message.channel, "**Invalid user**, make sure you entered a real user from this server.")
                 return
 
             listIndex = 0
             for adminUser in m_AdminUserList:
-                if ObtainMemberInfo(m_MemberList, userId, "id") == adminUser:
+                if ObtainMemberInfo(m_MemberList, userId, "id", "") == adminUser:
                     FileRemoveAdminUser(m_AdminUserList, listIndex)
                     await client.send_message(message.channel, "Removed Admin commands.")
                     return
@@ -290,14 +287,14 @@ async def on_message(message):
                     comboList = []
                     for userBd in m_UserBDList:
                         if serverId == ObtainMemberInfo(m_MemberList, userBd.userId, "si", serverId):
-                            name = ObtainMemberInfo(m_MemberList, userBd.userId, "na")
+                            name = ObtainMemberInfo(m_MemberList, userBd.userId, "na", "")
                             comboList.append([name, userBd.bd])
                         if len(comboList) == 10:
-                            fullMessage = CodeFormat(tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"))
+                            fullMessage = CodeFormat(tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"), "")
                             await client.send_message(message.author, fullMessage)
                             del comboList
                     if len(comboList) != 0 or comboList is not None:
-                        fullMessage = CodeFormat(tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"))
+                        fullMessage = CodeFormat(tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"), "")
                         await client.send_message(message.author, fullMessage)
         else: 
             await client.send_message(message.author, "The list is empty.")
@@ -305,7 +302,7 @@ async def on_message(message):
     #BIRTHDAY ADDER_START    
     if message.content.startswith(PREFIX + "addUserBD"):
         for userBd in m_UserBDList:
-            if ObtainMemberInfo(m_MemberList, str(message.author.id), "id") == userBd.userId:
+            if ObtainMemberInfo(m_MemberList, str(message.author.id), "id", "") == userBd.userId:
                 await client.send_message(message.channel, "You're already in my list")
                 return
         command = str(message.content)[14:] # Removes the "!addUserBD " from the content
@@ -318,7 +315,6 @@ async def on_message(message):
             await client.send_message(message.channel, "**Invalid date**, make sure you entered possible dates.")
             return
 
-        userId = str(re.search("[0-9]{18}", userId))
         if not IsUserIdValid(m_MemberList, userId):
             await client.send_message(message.channel, "**Invalid user**, make sure you entered a real user from this server.")
             return
@@ -329,7 +325,6 @@ async def on_message(message):
     #BIRTHDAY REMOVER_START
     if message.content.startswith(PREFIX + "removeChannelBD"):
         userId = str(message.author.id)
-        userId = str(re.search("[0-9]{18}", userId))
         listIndex = 0 # We're sending the index to FileRemoveUserBD
         for userBd in m_UserBDList:
             if userBd.userId == userId:
