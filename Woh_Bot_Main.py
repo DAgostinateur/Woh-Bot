@@ -1,9 +1,8 @@
 import asyncio
 import platform
-import os
 from re import *
 from sys import exit
-from subprocess import call, Popen
+from subprocess import Popen
 from datetime import datetime
 from datetime import date
 from util import *
@@ -99,6 +98,8 @@ async def on_ready():
     ExtractInfo(client)
     print(ConsoleMessage(client))
     # Doesn't work, no idea why:
+    # client.change_status(game=discord.Game(name="woh"))
+    # client.change_presence(game="woh")
     game = discord.Game(name="{}woh for help".format(PREFIX))
     await client.change_presence(game=game, status=discord.Status.online)
 
@@ -139,30 +140,27 @@ async def on_message(message):
         await client.add_reaction(message, ObtainEmojiWithName(m_EmojiList, "woh"))
     #WOH REACTION_END
 
-    #OPEN TEAMVIEWER_START
+    #OPEN CLOSE TEAMVIEWER_START
     if message.content.startswith(PREFIX + "openTV"):
         if IsMe(message.author.id):
-            await client.send_message(message.channel, "Opening TeamViewer...")
             if platform.system() == 'Windows':
-                call(WindowsCmdOpenTV()) # Opens TeamViewer.exe
+                proc = Popen(WindowsCmdOpenTV(), shell=True) # Opens TeamViewer.exe
+                await client.send_message(message.channel, "Opening TeamViewer...\nTeamViewer will maybe close in {0} seconds.".format(SECONDS_TV))
+                await asyncio.sleep(SECONDS_TV)
+                proc.kill() # Closes TeamViewer.exe
+                #await client.send_message(message.channel, "Closing TeamViewer...")
                 return
+
             if platform.system() == 'Linux':
-                proc = Popen(LinuxCmdOpenTV, shell=True)
+                proc = Popen(LinuxCmdOpenTV(), shell=True) # Opens TeamViewer.exe
+                await client.send_message(message.channel, "Opening TeamViewer...\nTeamViewer will maybe close in {0} seconds.".format(SECONDS_TV))
+                await asyncio.sleep(SECONDS_TV)
+                proc.kill() # Closes TeamViewer.exe
+                #await client.send_message(message.channel, "Closing TeamViewer...")
                 return
+
             await client.send_message(message.channel, "**ERROR, host PC is not a Windows or Linux OS**")
-    #OPEN TEAMVIEWER_END
-    #CLOSE TEAMVIEWER_START
-    if message.content.startswith(PREFIX + "closeTV"):
-        if IsMe(message.author.id):
-            await client.send_message(message.channel, "Closing TeamViewer...")
-            if platform.system() == 'Windows':
-                os.system(WindowsCmdCloseTV()) # Closes TeamViewer.exe
-                return
-            if platform.system() == 'Linux':
-                proc = Popen(LinuxCmdCloseTV, shell=True)
-                return
-            await client.send_message(message.channel, "**ERROR, host PC is not a Windows or Linux OS**")     
-    #CLOSE TEAMVIEWER_END
+    #OPEN CLOSE TEAMVIEWER_END
 
     #TOWN_START
     if message.content.startswith(PREFIX + "town") and message.server.id == MyServer():
@@ -263,7 +261,7 @@ async def on_message(message):
     if message.content.startswith(PREFIX + "removeAdminUser"):
         if IsMe(message.author.id):
             userId = str(message.content)[17:] # Removes the "!removeAdminUser " from the content
-            userId = search("[0-9]{18}", userId).group()
+            userId = re.search("[0-9]{18}", userId).group()
             if not IsUserIdValid(m_MemberList, userId):
                 await client.send_message(message.channel, "**Invalid user**, make sure you entered a real user from this server.")
                 return

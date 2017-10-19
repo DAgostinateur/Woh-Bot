@@ -3,7 +3,8 @@ from hidden import * # Things that I don't want to have seen by the public.
                      # I'm the only one with access to this
 
 PREFIX = '!' # The prefix that will be used for commands
-ID_LENGTH = 18 # Length of an Id
+ID_LENGTH = 18 # Length of a Discord Id
+SECONDS_TV = 600 # Number of seconds before closing TeamViewer
 
 HelpMessage = """```My prefix is [{0}].
 Brackets mean it's something you have to input.
@@ -18,13 +19,13 @@ Here's my list of commands:
 AdminHelpMessage = """```Admin Tier Commands.
 - {0}addChannelBD [channel] -- Sets the channel for birthday messages.
 - {0}removeChannelBD        -- Unsets the channel for birthday messages.
-- {0}showChannelBD          -- Shows the current channel used for birthday messages.```"""
+- {0}showChannelBD          -- Shows the current channel used for birthday messages.```""".format(PREFIX)
 OwnerHelpMessage = """```Owner Tier Commands.
 - {0}addAdminUser           -- Adds an admin user.
 - {0}removeAdminUser        -- Removes an admin user.
 - {0}listAdminUser          -- Lists every admin user.
-- {0}openTV                 -- Opens TeamViewer.
-- {0}closeTV                -- Closes TeamViewer.```""".format(PREFIX)
+- {0}allUserBD (not coded)  -- Lists EVERYONE from the birthday list with more info.
+- {0}openTV                 -- Opens TeamViewer and closes it after {1} seconds```""".format(PREFIX, SECONDS_TV)
 
 def ConsoleMessage(p_client):
     return """-----------
