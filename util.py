@@ -1,6 +1,24 @@
 """Tools for Woh_Bot_Main.py"""
+try:
+    import discord # https://github.com/Rapptz/discord.py
+except ImportError:
+    print("discord.py module not installed.\nhttps://github.com/Rapptz/discord.py")
+    exit(1)
+
+import asyncio
+import platform
+from re import *
+from sys import exit
+from subprocess import Popen
+from datetime import datetime
+from datetime import date
 from hidden import * # Things that I don't want to have seen by the public.
                      # I'm the only one with access to this
+try:
+    from tabulate import tabulate # https://pypi.python.org/pypi/tabulate
+except ImportError:
+    print("tabulate module not installed.\nhttps://pypi.python.org/pypi/tabulate")
+    exit(1)
 
 PREFIX = '!' # The prefix that will be used for commands
 ID_LENGTH = 18 # Length of a Discord Id
@@ -24,7 +42,7 @@ OwnerHelpMessage = """```Owner Tier Commands.
 - {0}addAdminUser           -- Adds an admin user.
 - {0}removeAdminUser        -- Removes an admin user.
 - {0}listAdminUser          -- Lists every admin user.
-- {0}allUserBD (not coded)  -- Lists EVERYONE from the birthday list with more info.
+- {0}listAllUserBD          -- Lists the entire birthday list.
 - {0}openTV                 -- Opens TeamViewer and closes it after {1} seconds```""".format(PREFIX, SECONDS_TV)
 
 def ConsoleMessage(p_client):
