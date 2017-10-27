@@ -2,6 +2,9 @@ from util import *
 from commands import WCommand
 
 # TODO:
+# - Remake every help messages. Right now it's hardcoded.
+#           Make a list of command_name and command_description
+#
 # - Updates m_EmojiList, m_MemberList, m_ChannelList when one of them is added, removed or updated:
 #           Will probably be in a different .py file.
 #
@@ -16,6 +19,7 @@ from commands import WCommand
 # - Open and close my Terraria and Gmod server:
 #           Send the Terraria console output on the channel made for it and recieve input
 #
+# - Maybe some sort of game
 # - Optimization
 # - Make everything easier to read
 
@@ -103,20 +107,20 @@ async def on_message(message):
     #WOH REACTION_END
 
     wCommand = WCommand(client, message)
-    await wCommand.woh()
-    await wCommand.openTV()
-    await wCommand.town()
-    await wCommand.city()
-    await wCommand.listAllUserBD()
-    await wCommand.listUserBD()
-    await wCommand.addUserBD()
-    await wCommand.removeUserBD()
-    await wCommand.showChannelBD()
-    await wCommand.addChannelBD()
-    await wCommand.removeChannelBD()
-    await wCommand.listAdminUser()
-    await wCommand.addAdminUser()
-    await wCommand.removeAdminUser()
+    await wCommand.woh(permissions="normal")
+    await wCommand.openTV(permissions="owner")
+    await wCommand.town(permissions="normal")
+    await wCommand.city(permissions="normal")
+    await wCommand.listAllUserBD(permissions="owner")
+    await wCommand.listUserBD(permissions="normal")
+    await wCommand.addUserBD(permissions="normal")
+    await wCommand.removeUserBD(permissions="normal")
+    await wCommand.showChannelBD(permissions="admin")
+    await wCommand.addChannelBD(permissions="admin")
+    await wCommand.removeChannelBD(permissions="admin")
+    await wCommand.listAdminUser(permissions="owner")
+    await wCommand.addAdminUser(permissions="owner")
+    await wCommand.removeAdminUser(permissions="owner")
 
 
 client.loop.create_task(HappyBirthdayTimer())

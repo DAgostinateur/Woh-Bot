@@ -5,8 +5,10 @@ except ImportError:
     print("discord.py module not installed.\nhttps://github.com/Rapptz/discord.py")
     exit(1)
 
+
 import asyncio
 import platform
+from inspect import stack
 from re import *
 from sys import exit
 from subprocess import Popen
@@ -19,6 +21,11 @@ try:
 except ImportError:
     print("tabulate module not installed.\nhttps://pypi.python.org/pypi/tabulate")
     exit(1)
+
+def myself():
+    """Returns the name of the parent method.""" 
+    # First method in the entire script
+    return str(stack()[1][3])
 
 PREFIX = '!' # The prefix that will be used for commands
 ID_LENGTH = 18 # Length of a Discord Id
@@ -66,7 +73,7 @@ class UserBD(list):
     def __init__(self, userId, bd):
         """Keyword arguments:
         userId -- user ID, Format: 000000000000000000
-        bd -- birthday date, Format: mm-dd"""
+        bd     -- birthday date, Format: mm-dd"""
         self.bd = bd
         self.userId = userId
 
@@ -76,7 +83,7 @@ class ChannelBD(list):
     def __init__(self, channelId, serverId):
         """Keyword arguments:
         channelId -- channel ID, Format: 000000000000000000
-        serverId -- server ID, Format: 000000000000000000"""
+        serverId  -- server ID, Format: 000000000000000000"""
         self.serverId = serverId
         self.channelId = channelId
 
@@ -89,7 +96,7 @@ def CodeFormat(p_string, p_code : ""):
 
     Keyword arguments:
     p_content -- content of the message
-    p_code -- code for the format"""
+    p_code    -- code for the format"""
     return "```{}\n".format(p_code) + p_string + "```"
     
 def UserFormat(p_userId):
@@ -114,7 +121,7 @@ def ObtainEmojiWithName(p_EmojiList, p_name : str):
     
     Keyword arguments:
     p_EmojiList -- emoji list
-    p_name -- name of emoji"""
+    p_name      -- name of emoji"""
     for emoji in p_EmojiList:
         if emoji.name == p_name: 
             return emoji
@@ -126,8 +133,8 @@ def ObtainChannelInfo(p_ChannelList, p_id : str, p_mode : "ch"):
     
     Keyword arguments:
     p_ChannelList -- channel list
-    p_id -- channel.id
-    p_mode -- different mode returns different objects
+    p_id          -- channel.id
+    p_mode        -- different mode returns different objects
 
     Modes:
     ch - Returns a Channel (DEFAULT)
@@ -157,9 +164,9 @@ def ObtainMemberInfo(p_MemberList, p_id : str, p_mode : "mb", p_serverId : ""):
     
     Keyword arguments:
     p_MemberList -- member list
-    p_id -- member.id
-    p_mode -- different mode returns different objects
-    p_serverId -- server id (for 'si' mode)
+    p_id         -- member.id
+    p_mode       -- different mode returns different objects
+    p_serverId   -- server id (for 'si' mode)
 
     Modes:
     mb - Returns a Member (DEFAULT)
@@ -202,7 +209,7 @@ def IsUserIdValid(p_MemberList, p_userId : str):
 
     Keyword arguments:
     p_MemberList -- member list
-    p_id -- member.id"""
+    p_id         -- member.id"""
     if len(p_userId) == ID_LENGTH and p_userId == ObtainMemberInfo(p_MemberList, p_userId, "id", ""):
         return True
     return False
@@ -216,7 +223,7 @@ def IsChannelIdValid(p_ChannelList, p_channelId : str):
     
     Keyword arguments:
     p_ChannelList -- channel list
-    p_channelId -- channel.id"""
+    p_channelId   -- channel.id"""
     if len(p_channelId) == ID_LENGTH and p_channelId == ObtainChannelInfo(p_ChannelList, numberId, "id"):
         return True
     return False
@@ -227,7 +234,7 @@ def IsAdminUser(p_adminUserList, p_userId : str):
     
     Keyword arguments:
     p_adminUserList -- admin user list
-    p_userId -- user id"""
+    p_userId        -- user id"""
     for adminUser in p_adminUserList:
         if adminUser == p_userId:
             return True
@@ -267,7 +274,7 @@ def FileRemoveUserBD(p_userBDList, p_listIndex : int):
     
     Keyword arguments:
     p_userBDList -- userBd list
-    p_listIndex -- remove object at index"""
+    p_listIndex  -- remove object at index"""
     del p_userBDList[p_listIndex]
     with open(FileNameUserBD(), 'w') as file:
         index = 0
@@ -288,7 +295,7 @@ def FileAddUserBD(p_userBDList, p_userId : str, p_bd : str):
     Keyword arguments:
     p_userBDList -- userBd list
     userId -- user id
-    bd -- birthday date"""
+    bd     -- birthday date"""
     p_userBDList.append(UserBD(p_userId, p_bd))
     with open(FileNameUserBD(), 'a') as file:
         if len(p_userBDList) <= 1:
@@ -319,7 +326,7 @@ def FileRemoveChannelBD(p_channelBDList, p_listIndex : int):
     
     Keyword arguments:
     p_channelBDList -- channelBd list
-    p_listIndex -- remove object at index"""
+    p_listIndex     -- remove object at index"""
     del p_channelBDList[p_listIndex]
     with open(FileNameChannelBD(), 'w') as file:
         index = 0
@@ -339,8 +346,8 @@ def FileAddChannelBD(p_channelBDList, p_channelId : str, p_serverId : str):
     
     Keyword arguments:
     p_channelBDList -- channelBd list
-    p_channelId -- channel id
-    p_serverId -- server id"""
+    p_channelId     -- channel id
+    p_serverId      -- server id"""
     p_channelBDList.append(ChannelBD(p_channelId, p_serverId))
     with open(FileNameChannelBD(), 'a') as file:
         if len(p_channelBDList) <= 1:
@@ -370,7 +377,7 @@ def FileRemoveAdminUser(p_adminUserList, p_listIndex : int):
     
     Keyword arguments:
     p_adminUserList -- adminUser list
-    p_listIndex -- remove object at index"""
+    p_listIndex     -- remove object at index"""
     del p_adminUserList[p_listIndex]
     with open(FileNameAdminUser(), 'w') as file:
         index = 0
@@ -390,7 +397,7 @@ def FileAddAdminUser(p_adminUserList, p_adminUser : str):
     
     Keyword arguments:
     p_adminUserList -- adminUser list
-    adminUser -- adminUser id"""
+    adminUser       -- adminUser id"""
     p_adminUserList.append(p_adminUser)
     with open(FileNameAdminUser(), 'a') as file:
         if len(p_adminUserList) <= 1:
