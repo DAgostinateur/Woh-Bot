@@ -2,9 +2,6 @@ from util import *
 from commands import WCommand
 
 # TODO:
-# - Remake every help messages. Right now it's hardcoded.
-#           Make a list of command_name and command_description
-#
 # - Updates m_EmojiList, m_MemberList, m_ChannelList when one of them is added, removed or updated:
 #           Will probably be in a different .py file.
 #

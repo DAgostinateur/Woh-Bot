@@ -31,27 +31,6 @@ PREFIX = '!' # The prefix that will be used for commands
 ID_LENGTH = 18 # Length of a Discord Id
 SECONDS_TV = 600 # Number of seconds before closing TeamViewer
 
-HelpMessage = """```My prefix is [{0}].
-Brackets mean it's something you have to input.
-
-Here's my list of commands:
-- {0}woh                    -- Sends you the list of commands.
-- {0}city [anything/anyone] -- Population of the city. Woh's Server only
-- {0}town [anything/anyone] -- Population of the town. Woh's Server only
-- {0}addUserBD [mm-dd]      -- Adds you to my birthday list.
-- {0}removeUserBD           -- Removes you from my birthday list.
-- {0}listUserBD             -- Lists everyone from my birthday list.```""".format(PREFIX)
-AdminHelpMessage = """```Admin Tier Commands.
-- {0}addChannelBD [channel] -- Sets the channel for birthday messages.
-- {0}removeChannelBD        -- Unsets the channel for birthday messages.
-- {0}showChannelBD          -- Shows the current channel used for birthday messages.```""".format(PREFIX)
-OwnerHelpMessage = """```Owner Tier Commands.
-- {0}addAdminUser           -- Adds an admin user.
-- {0}removeAdminUser        -- Removes an admin user.
-- {0}listAdminUser          -- Lists every admin user.
-- {0}listAllUserBD          -- Lists the entire birthday list.
-- {0}openTV                 -- Opens TeamViewer and closes it after {1} seconds```""".format(PREFIX, SECONDS_TV)
-
 def ConsoleMessage(p_client):
     return """-----------
 Woh Bot

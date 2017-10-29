@@ -25,6 +25,42 @@ class WCommand():
         p_cmdName -- function name/command name"""
         return self.message.content[len(PREFIX + p_cmdName):]
 
+    def _normalMessage(self):
+        normalList = [[self.woh.__name__, self.woh.__doc__],
+                      [self.city.__name__ + " [anything/anyone]", self.city.__doc__],
+                      [self.town.__name__ + " [anything/anyone]", self.town.__doc__],
+                      [self.addUserBD.__name__ + " [mm-dd]", self.addUserBD.__doc__],
+                      [self.removeUserBD.__name__, self.removeUserBD.__doc__],
+                      [self.listUserBD.__name__, self.listUserBD.__doc__]]
+        message = "My prefix is [{0}].\n".format(PREFIX)
+        message += tabulate(normalList, headers=["Command", "Description"], tablefmt="fancy_grid")
+        message = CodeFormat(message, "")
+        del normalList
+        return message
+    
+    def _adminMessage(self):
+        adminList = [[self.addChannelBD.__name__ + " [channel]", self.addChannelBD.__doc__],
+                     [self.removeChannelBD.__name__, self.removeChannelBD.__doc__],
+                     [self.showChannelBD.__name__, self.showChannelBD.__doc__]]
+        message = "Admin commands.\n"
+        message += tabulate(adminList, headers=["Command", "Description"], tablefmt="fancy_grid")
+        message = CodeFormat(message, "")
+        del adminList
+        return message
+
+
+    def _ownerMessage(self):
+        ownerList = [[self.addAdminUser.__name__ + " [user]", self.addAdminUser.__doc__],
+                     [self.removeAdminUser.__name__ + " [user]", self.removeAdminUser.__doc__],
+                     [self.listAdminUser.__name__, self.listAdminUser.__doc__],
+                     [self.listAllUserBD.__name__, self.listAllUserBD.__doc__],
+                     [self.openTV.__name__, self.openTV.__doc__.format(SECONDS_TV)]]
+        message = "Owner commands.\n"
+        message += tabulate(ownerList, headers=["Command", "Description"], tablefmt="fancy_grid")
+        message = CodeFormat(message, "")
+        del ownerList
+        return message
+
     def cmdCalled(self, p_cmdName):
         """Returns True if the message's command
         is equivalent to a command name, ignoring
@@ -79,17 +115,15 @@ class WCommand():
             return
 
 
-        finalHelpMessage = HelpMessage # Normal
-        if IsAdminUser(m_AdminUserList, self.message.author.id): # Admin
-            finalHelpMessage += AdminHelpMessage
+        await self.client.send_message(self.message.author, self._normalMessage())
+        if IsAdminUser(m_AdminUserList, self.message.author.id) or IsMe(self.message.author.id):
+            await self.client.send_message(self.message.author, self._adminMessage())
 
-        if IsMe(self.message.author.id): # Owner
-            finalHelpMessage += AdminHelpMessage + OwnerHelpMessage
-            
-        await self.client.send_message(self.message.author, finalHelpMessage)
+        if IsMe(self.message.author.id):
+            await self.client.send_message(self.message.author, self._ownerMessage())
 
     async def openTV(self, isDisabled = False, permissions = ""):
-        """Opens TeamViewer and closes it after x seconds."""
+        """Opens TeamViewer and closes it after {0} seconds."""
         if isDisabled:
             return
 
