@@ -5,20 +5,29 @@ from commands import WCommand
 # - Updates m_EmojiList, m_MemberList, m_ChannelList when one of them is added, removed or updated:
 #           Will probably be in a different .py file.
 #
-# - Custom prefix for every server
-# - A way for my friends to use emoji reactions from my Emoji Server
+# - Open and close my Terraria and Gmod server:
+#           Send the Terraria console output on the channel made for it and recieve input.
+#
+# - Remake Redbot's CustomCommands:
+#           More options: !cmd -d  | Deletes the message that calls the command.
+#           Options will be entered like Linux parameters.
+#
+# - Custom prefix for every server.
+# - Log everything.
+# - A way for my friends to use emoji reactions from my Emoji Server:
 #           Example: r:Loss: -> The bot will see this as a call for reaction,
 #                               it will react with said emoji on the previous message.
 #                               It will also remove the call.
 #                               When they react afterwards, the bot will remove his reaction.
 #                               In the future you will be able to choose which message with id or index.
 #
-# - Open and close my Terraria and Gmod server:
-#           Send the Terraria console output on the channel made for it and recieve input
+# - Reinstall discord.py:
+#           Apparently, having multiple versions break some things, like change_presence.
+#           This might be wrong.
 #
-# - Maybe some sort of game
-# - Optimization
-# - Make everything easier to read
+# - Optimization.
+# - Make everything easier to read.
+# - Maybe some sort of game.
 
 client = discord.Client()
 
@@ -72,16 +81,32 @@ async def HappyBirthdayTimer():
 async def on_ready():
     ExtractInfo(client)
     print(ConsoleMessage(client))
-    # Doesn't work, no idea why:
-    game = discord.Game(name="{0}{1} for help".format(PREFIX, WCommand.woh.__name__))
-    await client.change_presence(game=game, status=discord.Status.online)
 
+
+@client.event
+async def on_member_join(member):
+    if False:
+        member = discord.Member()
+
+    if member.server.id == MyServer():
+        humanCount = ObtainServerCount(m_ServerList, MyServer())
+        client.edit_server(MyServer(), name="{0}{1}".format(humanCount, MyServerName()))
+
+
+@client.event
+async def on_member_remove(member):
+    if False:
+        member = discord.Member()
+
+    if member.server.id == MyServer():
+        humanCount = ObtainServerCount(m_ServerList, MyServer())
+        client.edit_server(MyServer(), name="{0}{1}".format(humanCount, MyServerName()))
 
 @client.event
 async def on_reaction_add(reaction, user):
     if False: 
-        reaction = discord.Reaction() # Only there to help me, this breaks the bot
-        user = discord.User()         # Only there to help me, this breaks the bot
+        reaction = discord.Reaction()
+        user = discord.User()
 
     if user == client.user:
         return
@@ -105,6 +130,7 @@ async def on_message(message):
 
     wCommand = WCommand(client, message)
     await wCommand.woh(permissions="normal")
+    await wCommand.setPresence(permissions="owner")
     await wCommand.openTV(permissions="owner")
     await wCommand.town(permissions="normal")
     await wCommand.city(permissions="normal")

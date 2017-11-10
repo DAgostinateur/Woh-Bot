@@ -23,7 +23,7 @@ class WCommand():
         
         Keyword arguments:
         p_cmdName -- function name/command name"""
-        return self.message.content[len(PREFIX + p_cmdName):]
+        return self.message.content[len(PREFIX + p_cmdName):].lstrip()
 
     def _normalMessage(self):
         normalList = [[self.woh.__name__, self.woh.__doc__],
@@ -54,7 +54,8 @@ class WCommand():
                      [self.removeAdminUser.__name__ + " [user]", self.removeAdminUser.__doc__],
                      [self.listAdminUser.__name__, self.listAdminUser.__doc__],
                      [self.listAllUserBD.__name__, self.listAllUserBD.__doc__],
-                     [self.openTV.__name__, self.openTV.__doc__.format(SECONDS_TV)]]
+                     [self.openTV.__name__, self.openTV.__doc__.format(SECONDS_TV)],
+                     [self.setPresence.__name__, self.setPresence.__doc__]]
         message = "Owner commands.\n"
         message += tabulate(ownerList, headers=["Command", "Description"], tablefmt="fancy_grid")
         message = CodeFormat(message, "")
@@ -121,6 +122,24 @@ class WCommand():
 
         if IsMe(self.message.author.id):
             await self.client.send_message(self.message.author, self._ownerMessage())
+
+    async def setPresence(self, isDisabled = False, permissions = ""):
+        """Sets the bot's presence."""
+        if isDisabled:
+            return
+
+        if not self.cmdCalled(myself()):
+            return
+
+        if not self.hasPermission(permissions, self.message.author.id):
+            return
+
+
+        command = self._remCmd(myself())
+        if len(command) != 0:
+            game = discord.Game(name="{0}".format(command))
+            await self.client.change_presence(game=game)
+            await self.client.send_message(self.message.channel, "Changed Persence!")
 
     async def openTV(self, isDisabled = False, permissions = ""):
         """Opens TeamViewer and closes it after {0} seconds."""

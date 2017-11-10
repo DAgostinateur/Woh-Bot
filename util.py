@@ -5,7 +5,8 @@ except ImportError:
     print("discord.py module not installed.\nhttps://github.com/Rapptz/discord.py")
     exit(1)
 
-
+import os
+import json
 import asyncio
 import platform
 from inspect import stack
@@ -14,8 +15,8 @@ from sys import exit
 from subprocess import Popen
 from datetime import datetime
 from datetime import date
-from hidden import * # Things that I don't want to have seen by the public.
-                     # I'm the only one with access to this
+from hidden import * # Things I don't want seen by the public.
+
 try:
     from tabulate import tabulate # https://pypi.python.org/pypi/tabulate
 except ImportError:
@@ -24,11 +25,10 @@ except ImportError:
 
 def myself():
     """Returns the name of the parent method.""" 
-    # First method in the entire script
     return str(stack()[1][3])
 
-PREFIX = '!' # The prefix that will be used for commands
-ID_LENGTH = 18 # Length of a Discord Id
+PREFIX = '!'     # The prefix that will be used for commands
+ID_LENGTH = 18   # Length of a Discord Id
 SECONDS_TV = 600 # Number of seconds before closing TeamViewer
 
 def ConsoleMessage(p_client):
@@ -48,7 +48,7 @@ m_ChannelBDList = [] #               ChannelBD
 m_AdminUserList = [] #               Admin User
 
 class UserBD(list):
-    """A UserBD is made of an id from a user and his/her birthday date."""
+    """A UserBD is made of a user and their birthday date."""
     def __init__(self, userId, bd):
         """Keyword arguments:
         userId -- user ID, Format: 000000000000000000
@@ -62,10 +62,19 @@ class ChannelBD(list):
     def __init__(self, channelId, serverId):
         """Keyword arguments:
         channelId -- channel ID, Format: 000000000000000000
-        serverId  -- server ID, Format: 000000000000000000"""
+        serverId  -- server ID,  Format: 000000000000000000"""
         self.serverId = serverId
         self.channelId = channelId
 
+
+class AdminUser(list): # Will be used in the future
+    """An AdminUser is made of a user id and a server id."""
+    def __init__(self, userId, serverId):
+        """Keyword arguments:
+        userId    -- user ID,   Format: 000000000000000000
+        serverId  -- server ID, Format: 000000000000000000"""
+        self.userId = userId
+        self.serverId = serverId
 
 
 def CodeFormat(p_string, p_code : ""):
@@ -93,6 +102,21 @@ def ChannelFormat(p_channelId):
     Keyword arguments:
     p_channelId -- channel id"""
     return "<#" + p_channelId + ">"
+
+def ObtainServerCount(p_ServerList, p_serverId : str):
+    """Returns the number of humans in a server.
+    
+    Keyword arguments:
+    p_ServerList -- server list
+    p_serverId   -- server Id"""
+    humanCount = 0
+    for server in m_ServerList:
+        if server.id == p_serverId:
+            for member in server.members:
+                if not member.bot:
+                    humanCount += 1
+            break
+    return humanCount
 
 def ObtainEmojiWithName(p_EmojiList, p_name : str):
     """Returns the emoji from the emoji list with the name of it.
@@ -239,13 +263,14 @@ def FileExtractUserBD(p_userBDList):
     
     Keyword arguments:
     p_userBDList -- userBd list"""
+    del p_userBDList[:]
     with open(FileNameUserBD(), 'r') as file:
-        del p_userBDList[:]
-        content = file.readlines() # Copies every line in this variable, which is a list
-        content = [x.strip("\n") for x in content] #Removes \n from these lines
-        for line in content:
-            lineBD = line.split('|') # Seperates userId and bd
-            p_userBDList.append(UserBD(lineBD[0], lineBD[1]))
+        if os.stat(FileNameUserBD()).st_size == 0: # If the file is empty
+            return
+
+        listDicts = json.load(file)
+        for d in listDicts:
+            p_userBDList.append(UserBD(d['userId'], d['bd']))
 
 def FileRemoveUserBD(p_userBDList, p_listIndex : int):
     """Removes the content of the list at index
@@ -255,16 +280,11 @@ def FileRemoveUserBD(p_userBDList, p_listIndex : int):
     p_userBDList -- userBd list
     p_listIndex  -- remove object at index"""
     del p_userBDList[p_listIndex]
+    listDicts = [{'userId': x.userId, 'bd': x.bd} for x in p_userBDList]
+    json_string = json.dumps(listDicts, indent=4, separators=(',', ' : '))
     with open(FileNameUserBD(), 'w') as file:
-        index = 0
-        for userBd in p_userBDList:
-            if len(p_userBDList) == 0:
-                break
-            if index == 0:
-                file.write("{}|{}".format(userBd.userId, userBd.bd))
-            else:
-                file.write("\n{}|{}".format(userBd.userId, userBd.bd))
-            index += 1
+        file.write(json_string)
+
     print("List of UserBD has been updated. A UserBD has been removed.")
 
 def FileAddUserBD(p_userBDList, p_userId : str, p_bd : str):
@@ -276,11 +296,11 @@ def FileAddUserBD(p_userBDList, p_userId : str, p_bd : str):
     userId -- user id
     bd     -- birthday date"""
     p_userBDList.append(UserBD(p_userId, p_bd))
-    with open(FileNameUserBD(), 'a') as file:
-        if len(p_userBDList) <= 1:
-            file.write("{}|{}".format(p_userId, p_bd))
-        else:
-            file.write("\n{}|{}".format(p_userId, p_bd))
+    listDicts = [{'userId': x.userId, 'bd': x.bd} for x in p_userBDList]
+    json_string = json.dumps(listDicts, indent=4, separators=(',', ' : '))
+    with open(FileNameUserBD(), 'w') as file:
+        file.write(json_string)
+
     print("List of UserBD has been updated. A UserBD has been added.")
 #FileUserBD_END
 
@@ -291,13 +311,14 @@ def FileExtractChannelBD(p_channelBDList):
     
     Keyword arguments:
     p_channelBDList -- channelBd list"""
+    del p_channelBDList[:]
     with open(FileNameChannelBD(), 'r') as file:
-        del p_channelBDList[:]
-        content = file.readlines()
-        content = [x.strip("\n") for x in content]
-        for line in content:
-            lineBD = line.split('|') 
-            p_channelBDList.append(ChannelBD(lineBD[0], lineBD[1]))
+        if os.stat(FileNameChannelBD()).st_size == 0:
+            return
+
+        listDicts = json.load(file)
+        for d in listDicts:
+            p_channelBDList.append(ChannelBD(d['channelId'], d['serverId']))
 
 def FileRemoveChannelBD(p_channelBDList, p_listIndex : int):
     """Removes the content of the list at index
@@ -307,16 +328,11 @@ def FileRemoveChannelBD(p_channelBDList, p_listIndex : int):
     p_channelBDList -- channelBd list
     p_listIndex     -- remove object at index"""
     del p_channelBDList[p_listIndex]
+    listDicts = [{'channelId': x.channelId, 'serverId': x.serverId} for x in p_channelBDList]
+    json_string = json.dumps(listDicts, indent=4, separators=(',', ' : '))
     with open(FileNameChannelBD(), 'w') as file:
-        index = 0
-        for channelBd in p_channelBDList:
-            if len(p_channelBDList) == 0:
-                break
-            if index == 0:
-                file.write("{}|{}".format(channelBd.channelId, channelBd.serverId))
-            else:
-                file.write("\n{}|{}".format(channelBd.channelId, channelBd.serverId))
-            index += 1
+        file.write(json_string)
+
     print("List of ChannelBD has been updated. A ChannelBD has been removed.")
 
 def FileAddChannelBD(p_channelBDList, p_channelId : str, p_serverId : str):
@@ -328,11 +344,11 @@ def FileAddChannelBD(p_channelBDList, p_channelId : str, p_serverId : str):
     p_channelId     -- channel id
     p_serverId      -- server id"""
     p_channelBDList.append(ChannelBD(p_channelId, p_serverId))
-    with open(FileNameChannelBD(), 'a') as file:
-        if len(p_channelBDList) <= 1:
-            file.write("{}|{}".format(p_channelId, p_serverId))
-        else:
-            file.write("\n{}|{}".format(p_channelId, p_serverId))
+    listDicts = [{'channelId': x.channelId, 'serverId': x.serverId} for x in p_channelBDList]
+    json_string = json.dumps(listDicts, indent=4, separators=(',', ' : '))
+    with open(FileNameChannelBD(), 'w') as file:
+        file.write(json_string)
+
     print("List of ChannelBD has been updated. A ChannelBD has been added.")
 #FileChannelBD_END
 
@@ -343,12 +359,14 @@ def FileExtractAdminUser(p_adminUserList):
     
     Keyword arguments:
     p_adminUserList -- adminUser list"""
+    del p_adminUserList[:]
     with open(FileNameAdminUser(), 'r') as file:
-        del p_adminUserList[:]
-        content = file.readlines()
-        content = [x.strip("\n") for x in content]
-        for lineAdmin in content:
-            p_adminUserList.append(lineAdmin)
+        if os.stat(FileNameAdminUser()).st_size == 0:
+            return
+
+        listDicts = json.load(file)
+        for d in listDicts:
+            p_adminUserList.append(d['userId'])
 
 def FileRemoveAdminUser(p_adminUserList, p_listIndex : int):
     """Removes the content of the list at index
@@ -358,16 +376,11 @@ def FileRemoveAdminUser(p_adminUserList, p_listIndex : int):
     p_adminUserList -- adminUser list
     p_listIndex     -- remove object at index"""
     del p_adminUserList[p_listIndex]
+    listDicts = [{'userId': x} for x in p_adminUserList]
+    json_string = json.dumps(listDicts, indent=4, separators=(',', ' : '))
     with open(FileNameAdminUser(), 'w') as file:
-        index = 0
-        for adminUser in p_adminUserList:
-            if len(p_adminUserList) == 0:
-                break
-            if index == 0:
-                file.write("{}".format(adminUser))
-            else:
-                file.write("\n{}".format(adminUser))
-            index += 1
+        file.write(json_string)
+
     print("List of AdminUser has been updated. A AdminUser has been removed.")
 
 def FileAddAdminUser(p_adminUserList, p_adminUser : str):
@@ -378,18 +391,17 @@ def FileAddAdminUser(p_adminUserList, p_adminUser : str):
     p_adminUserList -- adminUser list
     adminUser       -- adminUser id"""
     p_adminUserList.append(p_adminUser)
-    with open(FileNameAdminUser(), 'a') as file:
-        if len(p_adminUserList) <= 1:
-            file.write("{}".format(p_adminUser))
-        else:
-            file.write("\n{}".format(p_adminUser))
+    listDicts = [{'userId': x} for x in p_adminUserList]
+    json_string = json.dumps(listDicts, indent=4, separators=(',', ' : '))
+    with open(FileNameAdminUser(), 'w') as file:
+        file.write(json_string)
+
     print("List of AdminUser has been updated. A AdminUser has been added.")
 #FileAdminUser_END
 
 #####################
 #      FILE_END     #
 #####################
-
 
 def ExtractInfo(p_client):
     """Fills up every member list.
