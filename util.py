@@ -1,4 +1,4 @@
-"""Tools for Woh_Bot_Main.py"""
+"""Tools for WohBot.py"""
 try:
     import discord # https://github.com/Rapptz/discord.py
 except ImportError:
@@ -27,17 +27,16 @@ def myself():
     """Returns the name of the parent method.""" 
     return str(stack()[1][3])
 
-PREFIX = '!'     # The prefix that will be used for commands
+
+PREFIX = '!'     # The prefix used for commands
 ID_LENGTH = 18   # Length of a Discord Id
 SECONDS_TV = 600 # Number of seconds before closing TeamViewer
+PERM_LEVEL_NONE = 0
+PERM_LEVEL_NORMAL = 1
+PERM_LEVEL_ADMIN = 2
+PERM_LEVEL_OWNER = 3
+CONSOLEMESSAGE = "-----------\nWoh Bot\n-----------\nLogged in as {0}\nCreator : D'Agostinateur Woh\n-----------"
 
-def ConsoleMessage(p_client):
-    return """-----------
-Woh Bot
------------
-Logged in as {}
-Creator : D'Agostinateur Woh
------------""".format(str(p_client.user))
 
 m_ServerList = []    # List of every Server Woh Bot is in
 m_ChannelList = []   # List of every Channel Woh Bot has access to
@@ -46,6 +45,10 @@ m_MemberList = []    #               Member
 m_UserBDList = []    #               UserBD
 m_ChannelBDList = [] #               ChannelBD
 m_AdminUserList = [] #               Admin User
+
+m_NormalMessage = []   # Using strings doesn't work :(
+m_AdminMessage = []    # So I have to use a silly hack
+m_OwnerMessage = []    # Using lists of 1 item instead
 
 class UserBD(list):
     """A UserBD is made of a user and their birthday date."""
@@ -403,11 +406,16 @@ def FileAddAdminUser(p_adminUserList, p_adminUser : str):
 #      FILE_END     #
 #####################
 
-def ExtractInfo(p_client):
+def ExtractInfo(p_client, p_wCommand):
     """Fills up every member list.
     
     Keyword arguments:
-    p_client -- discord client"""
+    p_client   -- main discord.Client()
+    p_wCommand --  main WComand()"""
+    m_NormalMessage.append(p_wCommand.normalMessage())
+    m_AdminMessage.append(p_wCommand.adminMessage())
+    m_OwnerMessage.append(p_wCommand.ownerMessage())
+
     for server in p_client.servers:
         m_ServerList.append(server)       # Colects every Server
         for channel in server.channels:
