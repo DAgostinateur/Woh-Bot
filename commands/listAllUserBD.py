@@ -29,7 +29,7 @@ class listAllUserBD(Command):
             head = ["Name", "Birthday(mm-dd)", "User ID"]
             comboList = []
             for userBd in m_UserBDList:
-                member = ObtainMemberInfo(m_MemberList, userBd.userId, "mb", "")
+                member = ObtainMemberInfo(self.client.get_all_members(), userBd.userId, "mb", "")
                 comboList.append([member.name, userBd.bd, member.id])
                 if len(comboList) == 10:
                     fullMessage = CodeFormat(tabulate(comboList, headers=head, tablefmt="fancy_grid"), "")

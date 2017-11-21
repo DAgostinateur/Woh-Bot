@@ -39,9 +39,6 @@ CONSOLEMESSAGE = "-----------\nWoh Bot\n-----------\nLogged in as {0}\nCreator :
 
 
 m_ServerList = []    # List of every Server Woh Bot is in
-m_ChannelList = []   # List of every Channel Woh Bot has access to
-m_EmojiList = []     #               Emoji
-m_MemberList = []    #               Member 
 m_UserBDList = []    #               UserBD
 m_ChannelBDList = [] #               ChannelBD
 m_AdminUserList = [] #               Admin User
@@ -106,19 +103,15 @@ def ChannelFormat(p_channelId):
     p_channelId -- channel id"""
     return "<#" + p_channelId + ">"
 
-def ObtainServerCount(p_ServerList, p_serverId : str):
+def ObtainServerCount(p_server):
     """Returns the number of humans in a server.
     
     Keyword arguments:
-    p_ServerList -- server list
-    p_serverId   -- server Id"""
+    p_ServerList -- server list"""
     humanCount = 0
-    for server in m_ServerList:
-        if server.id == p_serverId:
-            for member in server.members:
-                if not member.bot:
-                    humanCount += 1
-            break
+    for member in p_server.members:
+        if not member.bot:
+            humanCount += 1
     return humanCount
 
 def ObtainEmojiWithName(p_EmojiList, p_name : str):
@@ -418,20 +411,11 @@ def ExtractInfo(p_client, p_wCommand):
 
     for server in p_client.servers:
         m_ServerList.append(server)       # Colects every Server
-        for channel in server.channels:
-            m_ChannelList.append(channel) # Collects every Channel from every server
-        for emoji in server.emojis: 
-            m_EmojiList.append(emoji)     # Collects every Emoji from every server
-        for member in server.members: 
-            m_MemberList.append(member)   # Collects every Member from every server
 
     FileExtractUserBD(m_UserBDList)       # Collects every UserBd from FileNameUserBD()
     FileExtractChannelBD(m_ChannelBDList) # Collects every ChannelBd from FileNameChannelBD()
     FileExtractAdminUser(m_AdminUserList) # Collects every AdminUser from FileNameAdminUser()
     print("""List of Servers has been extracted.
-List of Channels has been extracted.
-List of Emojis has been extracted.
-List of Members has been extracted.
 List of UserBD has been extracted.
 List of ChannelBD has been extracted.
 List of AdminUser has been extracted.""")

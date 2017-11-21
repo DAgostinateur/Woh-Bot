@@ -15,7 +15,6 @@ from commands.showChannelBD import showChannelBD
 from commands.town import town
 from commands.woh import woh
 
-
 def _commandList(p_client):
    cmdList = []
 

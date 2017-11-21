@@ -27,7 +27,7 @@ class addUserBD(Command):
 
 
         for userBd in m_UserBDList:
-            if ObtainMemberInfo(m_MemberList, str(p_message.author.id), "id", "") == userBd.userId:
+            if ObtainMemberInfo(self.client.get_all_members(), str(p_message.author.id), "id", "") == userBd.userId:
                 await self.client.send_message(p_message.channel, "You're already in my list")
                 return
         bd = self._remCmd(p_message, self.__str__)
@@ -39,7 +39,7 @@ class addUserBD(Command):
             await self.client.send_message(p_message.channel, "**Invalid date**, make sure you entered a possible date.")
             return
 
-        if not IsUserIdValid(m_MemberList, userId): # Supposed to always return true
+        if not IsUserIdValid(self.client.get_all_members(), userId): # Supposed to always return true
             await client.send_message(p_message.channel, "**You're not in my list of Members**")
             return
 

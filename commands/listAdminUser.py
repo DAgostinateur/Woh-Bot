@@ -29,8 +29,8 @@ class listAdminUser(Command):
         if len(m_AdminUserList) != 0:
             comboList = []
             for adminUser in m_AdminUserList:
-                if serverId == ObtainMemberInfo(m_MemberList, adminUser, "si", serverId):
-                    name = ObtainMemberInfo(m_MemberList, adminUser, "na", "")
+                if serverId == ObtainMemberInfo(self.client.get_all_members(), adminUser, "si", serverId):
+                    name = ObtainMemberInfo(self.client.get_all_members(), adminUser, "na", "")
                     comboList.append([name])
                 if len(comboList) == 10:
                     fullMessage = CodeFormat(tabulate(comboList, headers=["Name"], tablefmt="fancy_grid"), "")

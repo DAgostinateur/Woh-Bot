@@ -31,8 +31,8 @@ class listUserBD(Command):
                 if channelBD.serverId == serverId:
                     comboList = []
                     for userBd in m_UserBDList:
-                        if serverId == ObtainMemberInfo(m_MemberList, userBd.userId, "si", serverId):
-                            name = ObtainMemberInfo(m_MemberList, userBd.userId, "na", "")
+                        if serverId == ObtainMemberInfo(self.client.get_all_members(), userBd.userId, "si", serverId):
+                            name = ObtainMemberInfo(self.client.get_all_members(), userBd.userId, "na", "")
                             comboList.append([name, userBd.bd])
                         if len(comboList) == 10:
                             fullMessage = CodeFormat(tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"), "")

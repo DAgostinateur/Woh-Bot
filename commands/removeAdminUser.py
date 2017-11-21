@@ -28,13 +28,13 @@ class removeAdminUser(Command):
 
         userId = self._remCmd(p_message, self.__str__())
         userId = re.search("[0-9]{18}", userId).group()
-        if not IsUserIdValid(m_MemberList, userId):
+        if not IsUserIdValid(self.client.get_all_members(), userId):
             await self.client.send_message(p_message.channel, "**Invalid user**, make sure you entered a real user from this server.")
             return
 
         listIndex = 0
         for adminUser in m_AdminUserList:
-            if ObtainMemberInfo(m_MemberList, userId, "id", "") == adminUser:
+            if ObtainMemberInfo(self.client.get_all_members(), userId, "id", "") == adminUser:
                 FileRemoveAdminUser(m_AdminUserList, listIndex)
                 await self.client.send_message(p_message.channel, "Removed User Admin.")
                 return

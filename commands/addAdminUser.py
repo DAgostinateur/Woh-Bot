@@ -28,12 +28,12 @@ class addAdminUser(Command):
 
         userId = self._remCmd(p_message, self.__str__)
         userId = search("[0-9]{18}", userId).group()
-        if not IsUserIdValid(m_MemberList, userId):
+        if not IsUserIdValid(self.client.get_all_members(), userId):
             await self.client.send_message(p_message.channel, "**Invalid user**, make sure you entered a real user from this server.")
             return
 
         for adminUser in m_AdminUserList:
-            if ObtainMemberInfo(m_MemberList, userId, "id", "") == adminUser:
+            if ObtainMemberInfo(self.client.get_all_members(), userId, "id", "") == adminUser:
                 await self.client.send_message(p_message.channel, "The user is already an admin.")
                 return
                 

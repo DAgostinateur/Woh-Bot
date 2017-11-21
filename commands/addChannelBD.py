@@ -28,7 +28,7 @@ class addChannelBD(Command):
 
         channelId = self._remCmd(p_message, self.__str__)
         channelId = search("[0-9]{18}", channelId).group()
-        if not IsChannelIdValid(m_ChannelList, channelId):
+        if not IsChannelIdValid(self.client.get_all_channels(), channelId):
             await self.client.send_message(p_message.channel, "**Invalid channel**, make sure you entered a real channel from this server.")
             return
             
