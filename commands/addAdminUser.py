@@ -26,7 +26,7 @@ class addAdminUser(Command):
             return
 
 
-        userId = self._remCmd(p_message, self.__str__)
+        userId = self._remCmd(p_message, self.__str__())
         userId = search("[0-9]{18}", userId).group()
         if not IsUserIdValid(self.client.get_all_members(), userId):
             await self.client.send_message(p_message.channel, "**Invalid user**, make sure you entered a real user from this server.")

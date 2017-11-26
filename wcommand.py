@@ -5,8 +5,10 @@ from commands.addUserBD import addUserBD
 from commands.city import city
 from commands.listAdminUser import listAdminUser
 from commands.listAllUserBD import listAllUserBD
+from commands.listEmojis import listEmojis
 from commands.listUserBD import listUserBD
 from commands.openTV import openTV
+from commands.react import react
 from commands.removeAdminUser import removeAdminUser
 from commands.removeChannelBD import removeChannelBD
 from commands.removeUserBD import removeUserBD
@@ -24,8 +26,10 @@ def _commandList(p_client):
    cmdList.append(city(p_client))
    cmdList.append(listAdminUser(p_client))
    cmdList.append(listAllUserBD(p_client))
+   cmdList.append(listEmojis(p_client))
    cmdList.append(listUserBD(p_client))
    cmdList.append(openTV(p_client))
+   cmdList.append(react(p_client))
    cmdList.append(removeAdminUser(p_client))
    cmdList.append(removeChannelBD(p_client))
    cmdList.append(removeUserBD(p_client))
@@ -52,7 +56,7 @@ class WCommand():
 
     def normalMessage(self):
         normalList = []
-        message = "My prefix is [{0}].\n".format(PREFIX)
+        message = "My prefix is [{0}]. SORRY MOBILE USERS\n".format(PREFIX)
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_NORMAL:
@@ -61,7 +65,7 @@ class WCommand():
                 cmdDes = doc.format(command.cmdDoc)
                 normalList.append([cmdStr, cmdDes])
 
-        message += tabulate(normalList, headers=["Command", "Description"], tablefmt="fancy_grid")
+        message += tabulate.tabulate(normalList, headers=["Command", "Description"], tablefmt="simple")
         finalMsg = CodeFormat(message, "")
         return finalMsg
     
@@ -77,7 +81,7 @@ class WCommand():
                 cmdDes = doc.format(command.cmdDoc)
                 adminList.append([cmdStr, cmdDes])
 
-        message += tabulate(adminList, headers=["Command", "Description"], tablefmt="fancy_grid")
+        message += tabulate.tabulate(adminList, headers=["Command", "Description"], tablefmt="simple")
         finalMsg = CodeFormat(message, "")
         return finalMsg
 
@@ -93,6 +97,6 @@ class WCommand():
                 cmdDes = doc.format(command.cmdDoc)
                 ownerList.append([cmdStr, cmdDes])
 
-        message += tabulate(ownerList, headers=["Command", "Description"], tablefmt="fancy_grid")
+        message += tabulate.tabulate(ownerList, headers=["Command", "Description"], tablefmt="simple")
         finalMsg = CodeFormat(message, "")
         return finalMsg

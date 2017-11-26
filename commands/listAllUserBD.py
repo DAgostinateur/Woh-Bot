@@ -32,11 +32,11 @@ class listAllUserBD(Command):
                 member = ObtainMemberInfo(self.client.get_all_members(), userBd.userId, "mb", "")
                 comboList.append([member.name, userBd.bd, member.id])
                 if len(comboList) == 10:
-                    fullMessage = CodeFormat(tabulate(comboList, headers=head, tablefmt="fancy_grid"), "")
+                    fullMessage = CodeFormat(tabulate.tabulate(comboList, headers=head, tablefmt="fancy_grid"), "")
                     await self.client.send_message(p_message.author, fullMessage)
-                    del comboList
+                    del comboList[:]
             if len(comboList) != 0 or comboList is not None:
-                fullMessage = CodeFormat(tabulate(comboList, headers=head, tablefmt="fancy_grid"), "")
+                fullMessage = CodeFormat(tabulate.tabulate(comboList, headers=head, tablefmt="fancy_grid"), "")
                 await self.client.send_message(p_message.author, fullMessage)
         else: 
             await self.client.send_message(p_message.author, "The list is empty.")

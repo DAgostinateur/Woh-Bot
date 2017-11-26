@@ -30,7 +30,7 @@ class addUserBD(Command):
             if ObtainMemberInfo(self.client.get_all_members(), str(p_message.author.id), "id", "") == userBd.userId:
                 await self.client.send_message(p_message.channel, "You're already in my list")
                 return
-        bd = self._remCmd(p_message, self.__str__)
+        bd = self._remCmd(p_message, self.__str__())
         userId = str(p_message.author.id)
 
         try:

@@ -28,7 +28,6 @@ class town(Command):
 
         if p_message.server.id == MyServer():
             population = self._remCmd(p_message, self.__str__())
-            print(population)
             if len(population) != 0:
                 msg = "Shut the Fuck Up Town\nPopulation: {}".format(population)
                 await self.client.send_message(p_message.channel, msg)

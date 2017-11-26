@@ -25,7 +25,7 @@ class setPresence(Command):
             return
 
 
-        gameName = self._remCmd(p_message, self.__str__)
+        gameName = self._remCmd(p_message, self.__str__())
         if len(gameName) != 0:
             game = discord.Game(name="{0}".format(gameName))
             await self.client.change_presence(game=game)

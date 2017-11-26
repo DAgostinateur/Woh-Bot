@@ -5,6 +5,12 @@ except ImportError:
     print("discord.py module not installed.\nhttps://github.com/Rapptz/discord.py")
     exit(1)
 
+try:
+    import tabulate # https://pypi.python.org/pypi/tabulate
+except ImportError:
+    print("tabulate module not installed.\nhttps://pypi.python.org/pypi/tabulate")
+    exit(1)
+
 import os
 import json
 import asyncio
@@ -17,17 +23,11 @@ from datetime import datetime
 from datetime import date
 from hidden import * # Things I don't want seen by the public.
 
-try:
-    from tabulate import tabulate # https://pypi.python.org/pypi/tabulate
-except ImportError:
-    print("tabulate module not installed.\nhttps://pypi.python.org/pypi/tabulate")
-    exit(1)
-
 def myself():
     """Returns the name of the parent method.""" 
     return str(stack()[1][3])
 
-
+tabulate.PRESERVE_WHITESPACE = True
 PREFIX = '!'     # The prefix used for commands
 ID_LENGTH = 18   # Length of a Discord Id
 SECONDS_TV = 600 # Number of seconds before closing TeamViewer
@@ -122,7 +122,7 @@ def ObtainEmojiWithName(p_EmojiList, p_name : str):
     p_EmojiList -- emoji list
     p_name      -- name of emoji"""
     for emoji in p_EmojiList:
-        if emoji.name == p_name: 
+        if emoji.name.lower() == p_name.lower(): 
             return emoji
     return "octagonal_sign" # If the bot ever uses this, that means I typed the name wrong
 

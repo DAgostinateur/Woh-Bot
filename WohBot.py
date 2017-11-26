@@ -3,6 +3,9 @@ from wcommand import WCommand
 from features.birthdayMessages import HappyBirthdayTimer, HappyBirthdayMessage
 
 # TODO:
+# - Move FILE_START FILE_END to another .py.
+# - Log everything.
+
 # - Open and close my Terraria and Gmod server:
 #           Send the Terraria console output on the channel made for it and recieve input.
 #           Learn about this, than I should be able to do it.
@@ -11,24 +14,19 @@ from features.birthdayMessages import HappyBirthdayTimer, HappyBirthdayMessage
 #           More options: !cmd -d  |> Deletes the message that calls the command.
 #           Options will be entered as Linux parameters.
 #
-# - Log everything.
-# - A way for my friends to use emoji reactions from my Emoji Server:
-#           Example: \r:Loss: -> The bot will see this as a call for reaction,
-#                               it will react with said emoji on the previous message.
-#                               It will also remove the call.
-#                               When they react afterwards, the bot will remove his reaction.
-#                               In the future you will be able to choose which message with id or index.
+# - !react command:
+#           When the user react, the bot's reaction will be removed.
 #
 # - Reinstall discord.py:
 #           Apparently, having multiple versions break some things, like change_presence.
 #           This might be wrong.
 #
-# - Move FILE_START FILE_END to another .py.
 # - Custom prefix for every server.
 # - Optimization.
+# - Music
 # - Make everything easier to read/PEP8.
 # - Maybe some sort of game:
-#           Incremental game for my bot where the entire server participates in.
+#           Incremental game for my bot where the entire server participates in passively or actively.
 
 client = discord.Client()
 wCommand = WCommand(client)
