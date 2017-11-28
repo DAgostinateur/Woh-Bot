@@ -14,7 +14,7 @@ class showChannelBD(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-        return "Command: {0}\nWhen the command is called, the bot will send the current channel used for sending birthday wishes.".format(self.__str__())
+        return MORE_HELP_SHOW_CHANNEL_BD.format(self.__str__())
 
     async def command(self, p_message):
         """Actual Command"""
@@ -34,7 +34,7 @@ class showChannelBD(Command):
 
         for channelBD in m_ChannelBDList:
             if channelBD.serverId == str(p_message.server.id):
-                msg = "I send birthday messages to {}.".format(ChannelFormat(channelBD.channelId))
+                msg = SHOW_CHANNEL_BD_SEND_IN.format(ChannelFormat(channelBD.channelId))
                 await self.client.send_message(p_message.channel, msg)
                 return
-        await self.client.send_message(p_message.channel, "I don't send birthday messages in this server.")
+        await self.client.send_message(p_message.channel, SHOW_CHANNEL_BD_NONE)

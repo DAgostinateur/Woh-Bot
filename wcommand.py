@@ -56,7 +56,7 @@ class WCommand():
 
     def normalMessage(self):
         normalList = []
-        message = "My prefix is [{0}]. {0}command --help for more information. SORRY MOBILE USERS\n".format(PREFIX)
+        message = NORMAL_MESSAGE_START.format(PREFIX)
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_NORMAL:
@@ -72,7 +72,7 @@ class WCommand():
 
     def adminMessage(self):
         adminList = []
-        message = "Admin commands.\n"
+        message = ADMIN_MESSAGE_START
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_ADMIN:
@@ -88,7 +88,7 @@ class WCommand():
 
     def ownerMessage(self):
         ownerList = []
-        message = "Owner commands.\n"
+        message = OWNER_MESSAGE_START
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_OWNER:

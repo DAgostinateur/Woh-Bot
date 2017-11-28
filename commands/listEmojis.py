@@ -14,7 +14,7 @@ class listEmojis(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}\nWhen the command is called, the bot will send you the list of **custom emojis** that is has access to.\nThese custom emojis are from every server Woh Bot is in.\nIt will use this format [Name] [Emoji]".format(self.__str__())
+       return MORE_HELP_LIST_EMOJIS.format(self.__str__())
 
     async def command(self, p_message):
         """Actual Command"""

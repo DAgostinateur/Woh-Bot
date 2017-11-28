@@ -14,7 +14,7 @@ class listAllUserBD(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}\nWhen the command is called, the bot will send you the entire list of user's birthday.\nIt will use this format [Name] [Birthday(mm-dd)] [UserId]".format(self.__str__())
+       return MORE_HELP_LIST_ALL_USER_BD.format(self.__str__())
 
     async def command(self, p_message):
         """Actual Command"""
@@ -46,4 +46,4 @@ class listAllUserBD(Command):
                 fullMessage = CodeFormat(tabulate.tabulate(comboList, headers=head, tablefmt="fancy_grid"), "")
                 await self.client.send_message(p_message.author, fullMessage)
         else: 
-            await self.client.send_message(p_message.author, "The list is empty.")
+            await self.client.send_message(p_message.author, EMPTY_LIST)

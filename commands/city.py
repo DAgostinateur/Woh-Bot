@@ -15,7 +15,7 @@ class city(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}{1}\nWhen the command is called, the bot will put the user input in the Gotem City format.\n_This is an inside joke_. Woh's Server only.".format(self.__str__(), self.cmdArguments)
+       return MORE_HELP_CITY.format(self.__str__(), self.cmdArguments)
 
     async def command(self, p_message):
         """Actual Command"""
@@ -36,6 +36,5 @@ class city(Command):
         if p_message.server.id == MyServer():
             population = self._remCmd(p_message, self.__str__())
             if len(population) != 0:
-                msg = "Gotem City\nPopulation: {}".format(population)
-                await self.client.send_message(p_message.channel, msg)
+                await self.client.send_message(p_message.channel, CITY_GC.format(population))
                 await self.client.delete_message(p_message)

@@ -14,7 +14,7 @@ class removeUserBD(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}\nWhen the command is called, the bot will remove the user from its birthday list, meaning it stops sending birthday wishes to that person".format(self.__str__())
+       return MORE_HELP_REMOVE_USER_BD.format(self.__str__())
 
     async def command(self, p_message):
         """Actual Command"""
@@ -37,7 +37,7 @@ class removeUserBD(Command):
         for userBd in m_UserBDList:
             if userBd.userId == userId:
                 FileRemoveUserBD(m_UserBDList, listIndex)
-                await self.client.send_message(p_message.channel, "You are no longer in my birthday list.")
+                await self.client.send_message(p_message.channel, REMOVE_USER_BD_SUCCESS)
                 return
             listIndex += 1
-        await self.client.send_message(p_message.channel, "Can't remove you if you're not in my list.")
+        await self.client.send_message(p_message.channel, REMOVE_USER_BD_NOT_IN)

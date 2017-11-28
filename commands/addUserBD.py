@@ -15,7 +15,7 @@ class addUserBD(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}{1}\nWhen the command is called, the bot will add the user in its birthday list.\nThe person will now recieve birthday wishes on its birthday.\nHere's an example of a [mm-dd] format: 03-05 , which means March 5th".format(self.__str__(), self.cmdArguments)
+       return MORE_HELP_ADD_USER_BD.format(self.__str__(), self.cmdArguments)
 
     async def command(self, p_message):
         """Actual Command"""
@@ -35,7 +35,7 @@ class addUserBD(Command):
 
         for userBd in m_UserBDList:
             if ObtainMemberInfo(self.client.get_all_members(), str(p_message.author.id), "id", "") == userBd.userId:
-                await self.client.send_message(p_message.channel, "You're already in my list")
+                await self.client.send_message(p_message.channel, ADD_USER_BD_ALREADY)
                 return
         bd = self._remCmd(p_message, self.__str__())
         userId = str(p_message.author.id)
@@ -43,12 +43,8 @@ class addUserBD(Command):
         try:
             bdTest = datetime.strptime(bd, "%m-%d") # Verifying the date
         except ValueError:
-            await self.client.send_message(p_message.channel, "**Invalid date**, make sure you entered a possible date.")
-            return
-
-        if not IsUserIdValid(self.client.get_all_members(), userId): # Supposed to always return true
-            await client.send_message(p_message.channel, "**You're not in my list of Members**")
+            await self.client.send_message(p_message.channel, INVALID_DATE)
             return
 
         FileAddUserBD(m_UserBDList, userId, bd)
-        await self.client.send_message(p_message.channel, "Added birthday.")
+        await self.client.send_message(p_message.channel, ADD_USER_BD_SUCCESS)

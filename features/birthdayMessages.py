@@ -2,7 +2,7 @@ from util import *
 
 def HappyBirthdayMessage(p_client, p_mm_dd : str, p_serverId : str):
     BdMessage = ""
-    HappyB = "{0} Happy Birthday ".format(ObtainEmojiWithName(p_client.get_all_emojis(), "woh"))
+    HappyB = HAPPY_BIRTHDAY_START.format(ObtainEmojiWithName(p_client.get_all_emojis(), "woh"))
     userBdToday = []
 
     # Checking the date and checking the user's server, then adding him/her to userBdToday[]: 

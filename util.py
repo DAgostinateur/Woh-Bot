@@ -22,27 +22,18 @@ from subprocess import Popen
 from datetime import datetime
 from datetime import date
 from hidden import * # Things I don't want seen by the public.
+from constants import *
 
 def myself():
     """Returns the name of the parent method.""" 
     return str(stack()[1][3])
 
 tabulate.PRESERVE_WHITESPACE = True
-HELP_COMMAND_PREFIX = "--help"
-PREFIX = '!'     # The prefix used for commands
-ID_LENGTH = 18   # Length of a Discord Id
-SECONDS_TV = 600 # Number of seconds before closing TeamViewer
-PERM_LEVEL_NONE = 0
-PERM_LEVEL_NORMAL = 1
-PERM_LEVEL_ADMIN = 2
-PERM_LEVEL_OWNER = 3
-CONSOLEMESSAGE = "-----------\nWoh Bot\n-----------\nLogged in as {0}\nCreator : D'Agostinateur Woh\n-----------"
 
-
-m_ServerList = []    # List of every Server Woh Bot is in
-m_UserBDList = []    #               UserBD
-m_ChannelBDList = [] #               ChannelBD
-m_AdminUserList = [] #               Admin User
+m_ServerList = []    # List of Server Woh Bot is in
+m_UserBDList = []    # List of UserBD
+m_ChannelBDList = [] # List of ChannelBD
+m_AdminUserList = [] # List of Admin User
 
 m_NormalMessage = []   # Using strings doesn't work :(
 m_AdminMessage = []    # So I have to use a silly hack
@@ -282,7 +273,7 @@ def FileRemoveUserBD(p_userBDList, p_listIndex : int):
     with open(FileNameUserBD(), 'w') as file:
         file.write(json_string)
 
-    print("List of UserBD has been updated. A UserBD has been removed.")
+    print(USER_BD_REMOVED_STRING)
 
 def FileAddUserBD(p_userBDList, p_userId : str, p_bd : str):
     """Adds the user id and bd to the list
@@ -298,7 +289,7 @@ def FileAddUserBD(p_userBDList, p_userId : str, p_bd : str):
     with open(FileNameUserBD(), 'w') as file:
         file.write(json_string)
 
-    print("List of UserBD has been updated. A UserBD has been added.")
+    print(USER_BD_ADDED_STRING)
 #FileUserBD_END
 
 #FileChannelBD_START
@@ -330,7 +321,7 @@ def FileRemoveChannelBD(p_channelBDList, p_listIndex : int):
     with open(FileNameChannelBD(), 'w') as file:
         file.write(json_string)
 
-    print("List of ChannelBD has been updated. A ChannelBD has been removed.")
+    print(CHANNEL_BD_REMOVED_STRING)
 
 def FileAddChannelBD(p_channelBDList, p_channelId : str, p_serverId : str):
     """Adds the channel id and server id to the list
@@ -346,7 +337,7 @@ def FileAddChannelBD(p_channelBDList, p_channelId : str, p_serverId : str):
     with open(FileNameChannelBD(), 'w') as file:
         file.write(json_string)
 
-    print("List of ChannelBD has been updated. A ChannelBD has been added.")
+    print(CHANNEL_BD_ADDED_STRING)
 #FileChannelBD_END
 
 #FileAdminUser_START
@@ -378,7 +369,7 @@ def FileRemoveAdminUser(p_adminUserList, p_listIndex : int):
     with open(FileNameAdminUser(), 'w') as file:
         file.write(json_string)
 
-    print("List of AdminUser has been updated. A AdminUser has been removed.")
+    print(ADMIN_USER_REMOVED_STRING)
 
 def FileAddAdminUser(p_adminUserList, p_adminUser : str):
     """Adds the adminUser id to the list
@@ -393,7 +384,7 @@ def FileAddAdminUser(p_adminUserList, p_adminUser : str):
     with open(FileNameAdminUser(), 'w') as file:
         file.write(json_string)
 
-    print("List of AdminUser has been updated. A AdminUser has been added.")
+    print(ADMIN_USER_ADDED_STRING)
 #FileAdminUser_END
 
 #####################
@@ -411,12 +402,9 @@ def ExtractInfo(p_client, p_wCommand):
     m_OwnerMessage.append(p_wCommand.ownerMessage())
 
     for server in p_client.servers:
-        m_ServerList.append(server)       # Colects every Server
+        m_ServerList.append(server)       # Gets every Server
 
-    FileExtractUserBD(m_UserBDList)       # Collects every UserBd from FileNameUserBD()
-    FileExtractChannelBD(m_ChannelBDList) # Collects every ChannelBd from FileNameChannelBD()
-    FileExtractAdminUser(m_AdminUserList) # Collects every AdminUser from FileNameAdminUser()
-    print("""List of Servers has been extracted.
-List of UserBD has been extracted.
-List of ChannelBD has been extracted.
-List of AdminUser has been extracted.""")
+    FileExtractUserBD(m_UserBDList)       # Gets every UserBd from FileNameUserBD()
+    FileExtractChannelBD(m_ChannelBDList) # Gets every ChannelBd from FileNameChannelBD()
+    FileExtractAdminUser(m_AdminUserList) # Gets every AdminUser from FileNameAdminUser()
+    print(JSON_COLLECTION_MESSAGE)

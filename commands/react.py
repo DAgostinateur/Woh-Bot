@@ -15,7 +15,7 @@ class react(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}{1}\nWhen the command is called, the bot will add a reaction to a message.\nThis is very useful if you want to use ***custom*** emojis from other servers where Woh Bot is in.\nYou can get message ids only on pc, by enabling Developer Mode in the settings and right clicking a message.".format(self.__str__(), self.cmdArguments)
+       return MORE_HELP_REACT.format(self.__str__(), self.cmdArguments)
 
     async def command(self, p_message):
         """Actual Command"""

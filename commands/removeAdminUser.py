@@ -15,7 +15,7 @@ class removeAdminUser(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}{1}\nWhen the command is called, the bot will remove a user's permission to use admin commands.".format(self.__str__(), self.cmdArguments)
+       return MORE_HELP_REMOVE_ADMIN_USER.format(self.__str__(), self.cmdArguments)
 
     async def command(self, p_message):
         """Actual Command"""
@@ -36,14 +36,14 @@ class removeAdminUser(Command):
         userId = self._remCmd(p_message, self.__str__())
         userId = re.search("[0-9]{18}", userId).group()
         if not IsUserIdValid(self.client.get_all_members(), userId):
-            await self.client.send_message(p_message.channel, "**Invalid user**, make sure you entered a real user from this server.")
+            await self.client.send_message(p_message.channel, INVALID_USER)
             return
 
         listIndex = 0
         for adminUser in m_AdminUserList:
             if ObtainMemberInfo(self.client.get_all_members(), userId, "id", "") == adminUser:
                 FileRemoveAdminUser(m_AdminUserList, listIndex)
-                await self.client.send_message(p_message.channel, "Removed User Admin.")
+                await self.client.send_message(p_message.channel, REMOVE_ADMIN_USER_SUCCESS.format(UserFormat(userId)))
                 return
             listIndex += 1
-        await self.client.send_message(p_message.channel, "Can't remove the user if he's not in the list.")
+        await self.client.send_message(p_message.channel, REMOVE_ADMIN_USER_NOT_IN)

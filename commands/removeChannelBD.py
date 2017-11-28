@@ -14,7 +14,7 @@ class removeChannelBD(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}\nWhen the command is called, the bot will remove the channel used for sending birthday wishes.\nRemoving the channel doesn't actaually delete the channel, it just stops the bot from sending birthday wishes.".format(self.__str__())
+       return MORE_HELP_REMOVE_CHANNEL_BD.format(self.__str__())
 
     async def command(self, p_message):
         """Actual Command"""
@@ -36,7 +36,7 @@ class removeChannelBD(Command):
         for channelBD in m_ChannelBDList:
             if channelBD.serverId == p_message.server.id:
                 FileRemoveChannelBD(m_ChannelBDList, listIndex)
-                await self.client.send_message(p_message.channel, "I will no longer send birthday messages in this server.")
+                await self.client.send_message(p_message.channel, REMOVE_CHANNEL_BD_SUCCESS)
                 return
             listIndex += 1
-        await self.client.send_message(p_message.channel, "There's no channel to remove.")
+        await self.client.send_message(p_message.channel, REMOVE_CHANNEL_BD_EMPTY)

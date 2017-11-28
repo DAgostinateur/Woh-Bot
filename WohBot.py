@@ -6,7 +6,6 @@ from features.birthdayMessages import HappyBirthdayTimer, HappyBirthdayMessage
 # - Move FILE_START FILE_END in another .py.
 # - Log everything.
 # - User AdminUser()
-# - Put constants and similar things in a different .py
 #
 # - Open and close my Terraria and Gmod server:
 #           Send the Terraria console output on the channel made for it and recieve input.
@@ -36,7 +35,7 @@ wCommand = WCommand(client)
 @client.event
 async def on_ready():
     ExtractInfo(client, wCommand)
-    print(CONSOLEMESSAGE.format(str(client.user)))
+    print(CONSOLE_MESSAGE.format(str(client.user)))
 
 
 @client.event

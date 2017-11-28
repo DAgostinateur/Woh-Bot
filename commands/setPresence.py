@@ -15,7 +15,7 @@ class setPresence(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-        return "Command: {0}{1}\nWhen the command is called, the bot will change it's **playing** status by using user input.".format(self.__str__(), self.cmdArguments)
+        return MORE_HELP_SET_PRESENCE.format(self.__str__(), self.cmdArguments)
 
     async def command(self, p_message):
         """Actual Command"""
@@ -37,4 +37,4 @@ class setPresence(Command):
         if len(gameName) != 0:
             game = discord.Game(name="{0}".format(gameName))
             await self.client.change_presence(game=game)
-            await self.client.send_message(p_message.channel, "Changed Presence!")
+            await self.client.send_message(p_message.channel, SET_PRESENCE_CHANGE)

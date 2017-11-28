@@ -15,7 +15,7 @@ class addAdminUser(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-        return "Command: {0}{1}\nWhen the command is called, the bot will grant a user permission to use admin commands.".format(self.__str__(), self.cmdArguments)
+        return MORE_HELP_ADD_ADMIN_USER.format(self.__str__(), self.cmdArguments)
 
     async def command(self, p_message):
         """Actual Command"""
@@ -34,15 +34,15 @@ class addAdminUser(Command):
 
 
         userId = self._remCmd(p_message, self.__str__())
-        userId = search("[0-9]{18}", userId).group()
+        userId = search(ID_REGEX, userId).group()
         if not IsUserIdValid(self.client.get_all_members(), userId):
-            await self.client.send_message(p_message.channel, "**Invalid user**, make sure you entered a real user from this server.")
+            await self.client.send_message(p_message.channel, INVALID_USER)
             return
 
         for adminUser in m_AdminUserList:
             if ObtainMemberInfo(self.client.get_all_members(), userId, "id", "") == adminUser:
-                await self.client.send_message(p_message.channel, "The user is already an admin.")
+                await self.client.send_message(p_message.channel, ADD_ADMIN_USER_ALREADY)
                 return
                 
-        await self.client.send_message(p_message.channel, "Admin Added.".format(UserFormat(userId)))
+        await self.client.send_message(p_message.channel, ADD_ADMIN_USER_SUCCESS.format(UserFormat(userId)))
         FileAddAdminUser(m_AdminUserList, userId)

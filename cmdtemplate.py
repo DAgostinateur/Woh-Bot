@@ -7,7 +7,9 @@ class Command():
     permissionLevel = PERM_LEVEL_NONE
     cmdArguments = ""
     cmdDoc = ""
-    moreHelp = "No documentation for this command :("
+
+    def moreHelp(self):
+       return MORE_HELP_DEFAULT
 
     def __init__(self, client):
         if False:

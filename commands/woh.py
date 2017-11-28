@@ -14,7 +14,7 @@ class woh(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}\nWhen the command is called, the bot will send you the list of commands that you have permission to use.".format(self.__str__())
+       return MORE_HELP_WOH.format(self.__str__())
 
     async def command(self, p_message):
         """Actual Command"""

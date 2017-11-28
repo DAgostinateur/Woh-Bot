@@ -15,7 +15,7 @@ class addChannelBD(Command):
         return str(self.__class__.__name__)
 
     def moreHelp(self):
-       return "Command: {0}{1}\nWhen the command is called, the bot will set the channel used for sending birthday wishes.".format(self.__str__(), self.cmdArguments)
+       return MORE_HELP_ADD_CHANNEL_BD.format(self.__str__(), self.cmdArguments)
 
     async def command(self, p_message):
         """Actual Command"""
@@ -34,16 +34,15 @@ class addChannelBD(Command):
 
 
         channelId = self._remCmd(p_message, self.__str__())
-        channelId = search("[0-9]{18}", channelId).group()
+        channelId = search(ID_REGEX, channelId).group()
         if not IsChannelIdValid(self.client.get_all_channels(), channelId):
-            await self.client.send_message(p_message.channel, "**Invalid channel**, make sure you entered a real channel from this server.")
+            await self.client.send_message(p_message.channel, INVALID_CHANNEL)
             return
             
         for channelBD in m_ChannelBDList:
             if channelBD.channelId == channelId:
-                msg = "**There's already a channel for birthday messages in this server**, delete the current one to change it."
-                await self.client.send_message(p_message.channel, msg)
+                await self.client.send_message(p_message.channel, ADD_CHANNEL_BD_ALREADY)
                 return
 
-        await self.client.send_message(p_message.channel, "I will now send birthday messages in {}.".format(ChannelFormat(channelId)))
+        await self.client.send_message(p_message.channel, ADD_CHANNEL_BD_SUCCESS.format(ChannelFormat(channelId)))
         FileAddChannelBD(m_ChannelBDList, channelId, str(p_message.server.id))
