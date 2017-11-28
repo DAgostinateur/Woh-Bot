@@ -56,7 +56,7 @@ class WCommand():
 
     def normalMessage(self):
         normalList = []
-        message = "My prefix is [{0}]. SORRY MOBILE USERS\n".format(PREFIX)
+        message = "My prefix is [{0}]. {0}command --help for more information. SORRY MOBILE USERS\n".format(PREFIX)
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_NORMAL:

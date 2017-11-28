@@ -28,6 +28,7 @@ def myself():
     return str(stack()[1][3])
 
 tabulate.PRESERVE_WHITESPACE = True
+HELP_COMMAND_PREFIX = "--help"
 PREFIX = '!'     # The prefix used for commands
 ID_LENGTH = 18   # Length of a Discord Id
 SECONDS_TV = 600 # Number of seconds before closing TeamViewer

@@ -13,6 +13,9 @@ class removeChannelBD(Command):
     def __str__(self):
         return str(self.__class__.__name__)
 
+    def moreHelp(self):
+       return "Command: {0}\nWhen the command is called, the bot will remove the channel used for sending birthday wishes.\nRemoving the channel doesn't actaually delete the channel, it just stops the bot from sending birthday wishes.".format(self.__str__())
+
     async def command(self, p_message):
         """Actual Command"""
         if self.isDisabled:
@@ -22,6 +25,10 @@ class removeChannelBD(Command):
             return
 
         if not self.hasPermission(self.permissionLevel, p_message.author.id):
+            return
+
+        if HELP_COMMAND_PREFIX in p_message.content.lower():
+            await self.client.send_message(p_message.author, self.moreHelp())
             return
 
 

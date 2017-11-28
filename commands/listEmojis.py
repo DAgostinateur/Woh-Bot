@@ -13,6 +13,9 @@ class listEmojis(Command):
     def __str__(self):
         return str(self.__class__.__name__)
 
+    def moreHelp(self):
+       return "Command: {0}\nWhen the command is called, the bot will send you the list of **custom emojis** that is has access to.\nThese custom emojis are from every server Woh Bot is in.\nIt will use this format [Name] [Emoji]".format(self.__str__())
+
     async def command(self, p_message):
         """Actual Command"""
         if self.isDisabled:
@@ -22,6 +25,10 @@ class listEmojis(Command):
             return
 
         if not self.hasPermission(self.permissionLevel, p_message.author.id):
+            return
+
+        if HELP_COMMAND_PREFIX in p_message.content.lower():
+            await self.client.send_message(p_message.author, self.moreHelp())
             return
 
 

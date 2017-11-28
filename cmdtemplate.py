@@ -7,6 +7,7 @@ class Command():
     permissionLevel = PERM_LEVEL_NONE
     cmdArguments = ""
     cmdDoc = ""
+    moreHelp = "No documentation for this command :("
 
     def __init__(self, client):
         if False:
@@ -20,8 +21,7 @@ class Command():
         Keyword arguments:
         p_message -- a Discord message
         p_cmdName -- function name/command name"""
-        msg = p_message.content[:len("{0}{1}".format(PREFIX, p_cmdName))]
-        return msg
+        return p_message.content[:len("{0}{1}".format(PREFIX, p_cmdName))]
 
     def _remCmd(self, p_message, p_cmdName):
         """Returns the content of a message
@@ -58,7 +58,7 @@ class Command():
         
         Permission Levels:
         normal - Everyone has access
-        admin  - Admins and I has access
+        admin  - Admins and I have access
         owner  - Only I have access"""
         if permissions == PERM_LEVEL_NORMAL:
             return True

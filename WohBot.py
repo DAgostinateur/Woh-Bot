@@ -3,9 +3,11 @@ from wcommand import WCommand
 from features.birthdayMessages import HappyBirthdayTimer, HappyBirthdayMessage
 
 # TODO:
-# - Move FILE_START FILE_END to another .py.
+# - Move FILE_START FILE_END in another .py.
 # - Log everything.
-
+# - User AdminUser()
+# - Put constants and similar things in a different .py
+#
 # - Open and close my Terraria and Gmod server:
 #           Send the Terraria console output on the channel made for it and recieve input.
 #           Learn about this, than I should be able to do it.

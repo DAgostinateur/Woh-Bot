@@ -2,7 +2,7 @@ from util import *
 from cmdtemplate import Command
 
 class addChannelBD(Command):
-    """Shows the current channel used for birthday messages."""
+    """Sets the channel used for birthday messages."""
 
     isDisabled = False
     permissionLevel = PERM_LEVEL_ADMIN
@@ -14,6 +14,9 @@ class addChannelBD(Command):
     def __str__(self):
         return str(self.__class__.__name__)
 
+    def moreHelp(self):
+       return "Command: {0}{1}\nWhen the command is called, the bot will set the channel used for sending birthday wishes.".format(self.__str__(), self.cmdArguments)
+
     async def command(self, p_message):
         """Actual Command"""
         if self.isDisabled:
@@ -23,6 +26,10 @@ class addChannelBD(Command):
             return
 
         if not self.hasPermission(self.permissionLevel, p_message.author.id):
+            return
+
+        if HELP_COMMAND_PREFIX in p_message.content.lower():
+            await self.client.send_message(p_message.author, self.moreHelp())
             return
 
 

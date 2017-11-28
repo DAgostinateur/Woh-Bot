@@ -13,6 +13,9 @@ class woh(Command):
     def __str__(self):
         return str(self.__class__.__name__)
 
+    def moreHelp(self):
+       return "Command: {0}\nWhen the command is called, the bot will send you the list of commands that you have permission to use.".format(self.__str__())
+
     async def command(self, p_message):
         """Actual Command"""
         if self.isDisabled:
@@ -23,6 +26,11 @@ class woh(Command):
 
         if not self.hasPermission(self.permissionLevel, p_message.author.id):
             return
+
+        if HELP_COMMAND_PREFIX in p_message.content.lower():
+            await self.client.send_message(p_message.author, self.moreHelp())
+            return
+
 
         await self.client.send_message(p_message.author, m_NormalMessage[0])
         if IsAdminUser(m_AdminUserList, p_message.author.id) or IsMe(p_message.author.id):

@@ -14,6 +14,9 @@ class addUserBD(Command):
     def __str__(self):
         return str(self.__class__.__name__)
 
+    def moreHelp(self):
+       return "Command: {0}{1}\nWhen the command is called, the bot will add the user in its birthday list.\nThe person will now recieve birthday wishes on its birthday.\nHere's an example of a [mm-dd] format: 03-05 , which means March 5th".format(self.__str__(), self.cmdArguments)
+
     async def command(self, p_message):
         """Actual Command"""
         if self.isDisabled:
@@ -23,6 +26,10 @@ class addUserBD(Command):
             return
 
         if not self.hasPermission(self.permissionLevel, p_message.author.id):
+            return
+
+        if HELP_COMMAND_PREFIX in p_message.content.lower():
+            await self.client.send_message(p_message.author, self.moreHelp())
             return
 
 

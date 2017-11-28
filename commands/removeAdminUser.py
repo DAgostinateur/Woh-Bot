@@ -14,6 +14,9 @@ class removeAdminUser(Command):
     def __str__(self):
         return str(self.__class__.__name__)
 
+    def moreHelp(self):
+       return "Command: {0}{1}\nWhen the command is called, the bot will remove a user's permission to use admin commands.".format(self.__str__(), self.cmdArguments)
+
     async def command(self, p_message):
         """Actual Command"""
         if self.isDisabled:
@@ -23,6 +26,10 @@ class removeAdminUser(Command):
             return
 
         if not self.hasPermission(self.permissionLevel, p_message.author.id):
+            return
+
+        if HELP_COMMAND_PREFIX in p_message.content.lower():
+            await self.client.send_message(p_message.author, self.moreHelp())
             return
 
 
