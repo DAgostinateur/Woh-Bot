@@ -1,7 +1,6 @@
-
 HELP_COMMAND_PREFIX = "--help" # The parameter used to get more information about a command
-PREFIX = '!' # The prefix used for commands
-ID_LENGTH = 18 # Length of a Discord Id
+PREFIX = '!'     # The prefix used for commands
+ID_LENGTH = 18   # Length of a Discord Id
 SECONDS_TV = 600 # Number of seconds before closing TeamViewer
 
 # Permissions for commands:
@@ -14,7 +13,7 @@ PERM_LEVEL_OWNER = 3  # Command access: Me
 CONSOLE_MESSAGE = "-----------\nWoh Bot\n-----------\nLogged in as {0}\nCreator : D'Agostinateur Woh\n-----------"
 
 # Message will appear after the collection of lists is done:
-JSON_COLLECTION_MESSAGE = "List of Servers has been extracted.\nList of UserBD has been extracted.\nList of ChannelBD has been extracted.\nList of AdminUser has been extracted."
+JSON_COLLECTION_MESSAGE = "List of Servers collected.\nList of UserBD collected.\nList of ChannelBD collected.\nList of AdminUser collected."
 
 # Messages to indicate an important change(this will only appear on console):
 ADMIN_USER_REMOVED_STRING = "AdminUser List updated. AdminUser removed."
@@ -29,8 +28,7 @@ NORMAL_MESSAGE_START = "My prefix is [{0}]. {0}[command_name] --help for more in
 ADMIN_MESSAGE_START = "Admin commands.\n"
 OWNER_MESSAGE_START = "Owner commands.\n"
 
-# Actual happy birthday message:
-HAPPY_BIRTHDAY_START = "{0} Happy Birthday "
+HAPPY_BIRTHDAY_START = "{0} Happy Birthday " # Actual happy birthday message
 
 # Default moreHelp() text:
 MORE_HELP_DEFAULT = "No documentation for this command. Please notify the owner."
@@ -114,7 +112,7 @@ MORE_HELP_REMOVE_CHANNEL_BD = "Command: {0}\nWhen the command is called, the bot
 # removeUserBD:
 MORE_HELP_REMOVE_USER_BD = "Command: {0}\nWhen the command is called, the bot will remove the user from its birthday list, meaning it stops sending birthday wishes to that person."
 # setPresence:
-MORE_HELP_SET_PRESENCE = "Command: {0}{1}\nWhen the command is called, the bot will change it's **playing** status by using user input."
+MORE_HELP_SET_PRESENCE = "Command: {0}{1}\nWhen the command is called, the bot will change it's playing status with user input. **Doesn't work**"
 # showChannelBD:
 MORE_HELP_SHOW_CHANNEL_BD = "Command: {0}\nWhen the command is called, the bot will send the current channel used for sending birthday wishes."
 # town:

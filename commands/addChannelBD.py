@@ -45,4 +45,4 @@ class addChannelBD(Command):
                 return
 
         await self.client.send_message(p_message.channel, ADD_CHANNEL_BD_SUCCESS.format(ChannelFormat(channelId)))
-        FileAddChannelBD(m_ChannelBDList, channelId, str(p_message.server.id))
+        jsonCollection.FileAddChannelBD(m_ChannelBDList, channelId, str(p_message.server.id))

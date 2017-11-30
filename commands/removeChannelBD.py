@@ -32,10 +32,10 @@ class removeChannelBD(Command):
             return
 
 
-        listIndex = 0 # Will be sent to FileRemoveChannelBD
+        listIndex = 0
         for channelBD in m_ChannelBDList:
             if channelBD.serverId == p_message.server.id:
-                FileRemoveChannelBD(m_ChannelBDList, listIndex)
+                jsonCollection.FileRemoveChannelBD(m_ChannelBDList, listIndex)
                 await self.client.send_message(p_message.channel, REMOVE_CHANNEL_BD_SUCCESS)
                 return
             listIndex += 1

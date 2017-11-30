@@ -34,7 +34,7 @@ class removeAdminUser(Command):
 
 
         userId = self._remCmd(p_message, self.__str__())
-        userId = re.search("[0-9]{18}", userId).group()
+        userId = re.search(ID_REGEX, userId).group()
         if not IsUserIdValid(self.client.get_all_members(), userId):
             await self.client.send_message(p_message.channel, INVALID_USER)
             return
@@ -42,7 +42,7 @@ class removeAdminUser(Command):
         listIndex = 0
         for adminUser in m_AdminUserList:
             if ObtainMemberInfo(self.client.get_all_members(), userId, "id", "") == adminUser:
-                FileRemoveAdminUser(m_AdminUserList, listIndex)
+                jsonCollection.FileRemoveAdminUser(m_AdminUserList, listIndex)
                 await self.client.send_message(p_message.channel, REMOVE_ADMIN_USER_SUCCESS.format(UserFormat(userId)))
                 return
             listIndex += 1

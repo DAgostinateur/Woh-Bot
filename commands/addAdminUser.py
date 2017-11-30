@@ -45,4 +45,4 @@ class addAdminUser(Command):
                 return
                 
         await self.client.send_message(p_message.channel, ADD_ADMIN_USER_SUCCESS.format(UserFormat(userId)))
-        FileAddAdminUser(m_AdminUserList, userId)
+        jsonCollection.FileAddAdminUser(m_AdminUserList, userId)

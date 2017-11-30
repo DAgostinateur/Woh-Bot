@@ -33,10 +33,10 @@ class removeUserBD(Command):
 
 
         userId = str(p_message.author.id)
-        listIndex = 0 # Will be sent to FileRemoveUserBD
+        listIndex = 0
         for userBd in m_UserBDList:
             if userBd.userId == userId:
-                FileRemoveUserBD(m_UserBDList, listIndex)
+                jsonCollection.FileRemoveUserBD(m_UserBDList, listIndex)
                 await self.client.send_message(p_message.channel, REMOVE_USER_BD_SUCCESS)
                 return
             listIndex += 1
