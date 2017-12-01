@@ -1,6 +1,6 @@
 from util import *
 from wcommand import WCommand
-from features.birthdayMessages import HappyBirthdayTimer, HappyBirthdayMessage
+from features import birthdayMessages
 
 # TODO:
 # - User AdminUser().
@@ -30,7 +30,7 @@ from features.birthdayMessages import HappyBirthdayTimer, HappyBirthdayMessage
 
 client = discord.Client()
 wCommand = WCommand(client)
-    
+
 @client.event
 async def on_ready():
     ExtractInfo(client, wCommand)
@@ -85,5 +85,5 @@ async def on_message(message):
     await wCommand.commandChecker(message)
 
 
-client.loop.create_task(HappyBirthdayTimer(client))
+client.loop.create_task(birthdayMessages.HappyBirthdayTimer(client))
 client.run(Token())

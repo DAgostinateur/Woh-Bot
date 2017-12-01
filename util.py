@@ -107,6 +107,24 @@ def ObtainServerCount(p_server):
             humanCount += 1
     return humanCount
 
+def GetNextDayDelta(p_hour : int):
+    """Calculate the delta.
+    
+    Keyword arguments:
+    p_hour -- hour in the day"""
+    today_n = datetime.today()
+    today_t = datetime.today()
+    try:
+        today_t = today_n.replace(day=today_n.day + 1, hour=p_hour, minute=0, second=0, microsecond=0)
+    except ValueError:
+        try:
+            # Only time it will go there is at the end of the month, except December:
+            today_t = today_n.replace(month=today_n.month + 1, day=1, hour=p_hour, minute=0, second=0, microsecond=0)
+        except ValueError:
+            # Only time it will go there is on December 30th:
+            today_t = today_n.replace(year=today_n.year + 1, month=1, day=1, hour=p_hour, minute=0, second=0, microsecond=0)
+    return int((today_t - today_n).seconds + 1)
+
 def ObtainEmojiWithName(p_EmojiList, p_name : str):
     """Returns the emoji from the emoji list with the name of it.
     Returns 'octagonal_sign' if the name is wrongly entered.

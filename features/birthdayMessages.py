@@ -29,18 +29,5 @@ async def HappyBirthdayTimer(p_client):
                     if text != "":
                         await p_client.send_message(discord.Object(id=channelBD.channelId), text)
 
-        today_n = datetime.today()
-        today_t = datetime.today()
-        try:
-            today_t = today_n.replace(day=today_n.day + 1, hour=11, minute=0, second=0, microsecond=0)
-        except ValueError:
-            try:
-                # Only time it will go there is at the end of the month, except December:
-                today_t = today_n.replace(month=today_n.month + 1, day=1, hour=11, minute=0, second=0, microsecond=0)
-            except ValueError:
-                # Only time it will go there is on December 30th:
-                today_t = today_n.replace(year=today_n.year + 1, month=1, day=1, hour=11, minute=0, second=0, microsecond=0)
-
-        delta_secs = int((today_t - today_n).seconds + 1)
-        print(today_n) # Userful for the console
-        await asyncio.sleep(delta_secs) # Task runs every day at 11h00am
+        print(datetime.today()) # Userful for the console
+        await asyncio.sleep(GetNextDayDelta(11)) # Task runs every day at 11h00
