@@ -20,17 +20,8 @@ class React(Command):
 
     async def command(self, p_message):
         """Actual Command"""
-        if self.isDisabled:
-            return
-
-        if not self.cmd_called(p_message, self.__str__()):
-            return
-
-        if not self.has_permission(self.permissionLevel, p_message.author.id):
-            return
-
-        if HELP_COMMAND_PREFIX in p_message.content.lower():
-            await self.client.send_message(p_message.author, self.more_help())
+        if await self.execute_command(self.isDisabled, p_message, self.__str__(),
+                                      self.permissionLevel, self.more_help()):
             return
 
         cmd_content = self._rem_cmd(p_message, self.__str__()).split()

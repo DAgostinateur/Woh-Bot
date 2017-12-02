@@ -4,8 +4,6 @@ from features import birthdayMessages
 
 
 # TODO:
-# - Log everything.
-#
 # - Open and close my Terraria and Gmod server:
 #           Send the Terraria console output on the channel made for it and receive input.
 #           Learn about this, than I should be able to do it.
@@ -14,15 +12,13 @@ from features import birthdayMessages
 #           More options: !cmd -d  |> Deletes the message that calls the command.
 #           Options will be entered as Linux parameters.
 #
-# - !react command:
-#           When the user react, the bot's reaction will be removed.
-#
 # - Reinstall discord.py:
 #           Apparently, having multiple versions break some things, like change_presence.
 #           This might be wrong.
 #
 # - Custom prefix for every server.
 # - Optimization.
+# - Log everything.
 # - Music
 # - Maybe some sort of game:
 #           Incremental game for my bot where the entire server participates in passively or actively.

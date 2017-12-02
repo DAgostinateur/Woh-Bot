@@ -45,7 +45,7 @@ EMPTY_LIST = "The list is empty."
 
 # addAdminUser:
 ADD_ADMIN_USER_ALREADY = "The user is already an admin."
-ADD_ADMIN_USER_SUCCESS = "{0} is now an admin."
+ADD_ADMIN_USER_SUCCESS = "{0} now has access to admin commands."
 # addChannelBD:
 ADD_CHANNEL_BD_INVALID = ""
 ADD_CHANNEL_BD_ALREADY = "**There's already a channel for birthday messages in this server**, delete the current one " \

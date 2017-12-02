@@ -77,3 +77,19 @@ class Command:
         else:
             return False
         return False
+
+    async def execute_command(self, p_is_disabled, p_message, p_cmd_name, p_permission_level, p_more_help):
+        if p_is_disabled:
+            return True
+
+        if not self.cmd_called(p_message, p_cmd_name):
+            return True
+
+        if not self.has_permission(p_permission_level, p_message.author.id):
+            return True
+
+        if HELP_COMMAND_PREFIX in p_message.content.lower():
+            await self.client.send_message(p_message.author, p_more_help)
+            return True
+
+        return False
