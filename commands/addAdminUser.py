@@ -42,9 +42,11 @@ class Addadminuser(Command):
             return
 
         for adminUser in m_AdminUserList:
-            if obtain_member_info(self.client.get_all_members(), user_id, "id", "") == adminUser:
+            if obtain_member_info(self.client.get_all_members(), user_id, "id", "") == adminUser.userId and \
+                    obtain_member_info(self.client.get_all_members(), user_id, "si",
+                                       p_message.server.id) == adminUser.serverId:
                 await self.client.send_message(p_message.channel, ADD_ADMIN_USER_ALREADY)
                 return
 
         await self.client.send_message(p_message.channel, ADD_ADMIN_USER_SUCCESS.format(user_format(user_id)))
-        file_add_admin_user(m_AdminUserList, user_id)
+        file_add_admin_user(m_AdminUserList, user_id, p_message.server.id)

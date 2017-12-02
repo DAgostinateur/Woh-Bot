@@ -22,7 +22,7 @@ class ChannelBD(list):
         self.channelId = channel_id
 
 
-class AdminUser(list):  # Will be used in the future
+class AdminUser(list):
     """An AdminUser is made of a user id and a server id."""
 
     def __init__(self, user_id, server_id):

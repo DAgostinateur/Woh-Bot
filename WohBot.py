@@ -4,7 +4,6 @@ from features import birthdayMessages
 
 
 # TODO:
-# - User AdminUser().
 # - Log everything.
 #
 # - Open and close my Terraria and Gmod server:

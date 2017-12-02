@@ -36,16 +36,18 @@ class Listadminuser(Command):
         if len(m_AdminUserList) != 0:
             combo_list = []
             for adminUser in m_AdminUserList:
-                if server_id == obtain_member_info(self.client.get_all_members(), adminUser, "si", server_id):
-                    name = obtain_member_info(self.client.get_all_members(), adminUser, "na", "")
-                    combo_list.append([name])
+                if server_id == obtain_member_info(self.client.get_all_members(), adminUser.userId, "si", server_id):
+                    name = obtain_member_info(self.client.get_all_members(), adminUser.userId, "na", "")
+                    combo_list.append([name, server_id])
                 if len(combo_list) == 10:
-                    full_message = code_format(tabulate.tabulate(combo_list, headers=["Name"], tablefmt="fancy_grid"),
-                                               "")
+                    full_message = code_format(
+                        tabulate.tabulate(combo_list, headers=["Name", "Server"], tablefmt="fancy_grid"),
+                        "")
                     await self.client.send_message(p_message.author, full_message)
                     del combo_list[:]
             if len(combo_list) != 0 or combo_list is not None:
-                full_message = code_format(tabulate.tabulate(combo_list, headers=["Name"], tablefmt="fancy_grid"), "")
+                full_message = code_format(
+                    tabulate.tabulate(combo_list, headers=["Name", "Server"], tablefmt="fancy_grid"), "")
                 await self.client.send_message(p_message.author, full_message)
         else:
             await self.client.send_message(p_message.author, EMPTY_LIST)

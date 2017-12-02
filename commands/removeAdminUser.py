@@ -43,7 +43,9 @@ class Removeadminuser(Command):
 
         list_index = 0
         for adminUser in m_AdminUserList:
-            if obtain_member_info(self.client.get_all_members(), user_id, "id", "") == adminUser:
+            if obtain_member_info(self.client.get_all_members(), user_id, "id", "") == adminUser.userId and \
+                    obtain_member_info(self.client.get_all_members(), user_id, "si",
+                                       p_message.server.id) == adminUser.serverId:
                 file_remove_admin_user(m_AdminUserList, list_index)
                 await self.client.send_message(p_message.channel,
                                                REMOVE_ADMIN_USER_SUCCESS.format(user_format(user_id)))

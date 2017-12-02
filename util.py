@@ -140,7 +140,8 @@ def obtain_channel_info(p_channel_list, p_id: str, p_mode="ch"):
                 return channel.name  # Returns the name
     else:
         print("{} MODE DOESN'T EXIST (ObtainChannelInfo)".format(p_mode))
-        return "-1"
+
+    return "-1"
 
 
 def obtain_member_info(p_member_list, p_id: str, p_mode="mb", p_server_id=""):
@@ -182,7 +183,8 @@ def obtain_member_info(p_member_list, p_id: str, p_mode="mb", p_server_id=""):
                 return member.server.id  # Returns the server id of the member.
     else:
         print("{} MODE DOESN'T EXIST (ObtainMemberInfo)".format(p_mode))
-        return "-1"
+
+    return "-1"
 
 
 def is_user_id_valid(p_member_list, p_user_id: str):
@@ -206,9 +208,7 @@ def is_channel_id_valid(p_channel_list, p_channel_id: str):
     Keyword arguments:
     p_channel_list -- channel list
     p_channel_id   -- channel.id"""
-    if len(p_channel_id) == ID_LENGTH and p_channel_id == obtain_channel_info(p_channel_list, p_channel_id, "id"):
-        return True
-    return False
+    return len(p_channel_id) == ID_LENGTH and p_channel_id == obtain_channel_info(p_channel_list, p_channel_id, "id")
 
 
 def is_admin_user(p_admin_user_list, p_user_id: str):
@@ -228,9 +228,7 @@ def is_me(p_user_id: str):
 
     Keyword arguments:
     p_user_id -- user id"""
-    if p_user_id == my_id():
-        return True
-    return False
+    return p_user_id == my_id()
 
 
 def extract_info(p_client, p_wcommand):
@@ -246,7 +244,7 @@ def extract_info(p_client, p_wcommand):
     for server in p_client.servers:
         m_ServerList.append(server)  # Gets every Server
 
-    file_extract_user_bd(m_UserBDList)  # Gets every UserBd from FileNameUserBD()
-    file_extract_channel_bd(m_ChannelBDList)  # Gets every ChannelBd from FileNameChannelBD()
-    file_extract_admin_user(m_AdminUserList)  # Gets every AdminUser from FileNameAdminUser()
+    file_extract_user_bd(m_UserBDList)  # Gets every UserBd and put them in the list
+    file_extract_channel_bd(m_ChannelBDList)  # Gets every ChannelBd and put them in the list
+    file_extract_admin_user(m_AdminUserList)  # Gets every AdminUser and put them in the list
     print(JSON_COLLECTION_MESSAGE)

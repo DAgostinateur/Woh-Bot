@@ -43,8 +43,8 @@ def file_add_user_bd(p_user_bd_list, p_user_id: str, p_bd: str):
     
     Keyword arguments:
     p_user_bd_list -- userBd list
-    userId -- user id
-    bd     -- birthday date"""
+    userId         -- user id
+    bd             -- birthday date"""
     p_user_bd_list.append(UserBD(p_user_id, p_bd))
     list_dicts = [{'userId': x.userId, 'bd': x.bd} for x in p_user_bd_list]
     json_string = json.dumps(list_dicts, indent=4, separators=(',', ' : '))
@@ -116,7 +116,7 @@ def file_extract_admin_user(p_admin_user_list):
 
         list_dicts = json.load(file)
         for d in list_dicts:
-            p_admin_user_list.append(d['userId'])
+            p_admin_user_list.append(AdminUser(d['userId'], d['serverId']))
 
 
 def file_remove_admin_user(p_admin_user_list, p_list_index: int):
@@ -127,7 +127,7 @@ def file_remove_admin_user(p_admin_user_list, p_list_index: int):
     p_admin_user_list -- adminUser list
     p_list_index     -- remove object at index"""
     del p_admin_user_list[p_list_index]
-    list_dicts = [{'userId': x} for x in p_admin_user_list]
+    list_dicts = [{'userId': x.userId, 'serverId': x.serverId} for x in p_admin_user_list]
     json_string = json.dumps(list_dicts, indent=4, separators=(',', ' : '))
     with open(hidden.file_name_admin_user(), 'w') as file:
         file.write(json_string)
@@ -135,15 +135,16 @@ def file_remove_admin_user(p_admin_user_list, p_list_index: int):
     print(constants.ADMIN_USER_REMOVED_STRING)
 
 
-def file_add_admin_user(p_admin_user_list, p_admin_user: str):
+def file_add_admin_user(p_admin_user_list, p_admin_user: str, p_server_id: str):
     """Adds the adminUser id to the list
     and writes it in FileNameAdminUser().
     
     Keyword arguments:
-    p_admin_user_list -- adminUser list
-    adminUser       -- adminUser id"""
-    p_admin_user_list.append(p_admin_user)
-    list_dicts = [{'userId': x} for x in p_admin_user_list]
+    p_admin_user_list  -- adminUser list
+    p_admin_user       -- adminUser id
+    p_server_id        -- server id"""
+    p_admin_user_list.append(AdminUser(p_admin_user, p_server_id))
+    list_dicts = [{'userId': x.userId, 'serverId': x.serverId} for x in p_admin_user_list]
     json_string = json.dumps(list_dicts, indent=4, separators=(',', ' : '))
     with open(hidden.file_name_admin_user(), 'w') as file:
         file.write(json_string)
