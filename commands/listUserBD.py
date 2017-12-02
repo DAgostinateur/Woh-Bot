@@ -1,19 +1,20 @@
 from util import *
 from cmdtemplate import Command
 
-class listUserBD(Command):
+
+class Listuserbd(Command):
     """Lists everyone from my birthday list."""
 
     isDisabled = False
     permissionLevel = PERM_LEVEL_NORMAL
 
-    def getDoc(self):
+    def get_doc(self):
         return str(self.__class__.__doc__)
 
     def __str__(self):
         return str(self.__class__.__name__)
 
-    def moreHelp(self):
+    def more_help(self):
         return MORE_HELP_LIST_USER_BD.format(self.__str__())
 
     async def command(self, p_message):
@@ -21,32 +22,36 @@ class listUserBD(Command):
         if self.isDisabled:
             return
 
-        if not self.cmdCalled(p_message, self.__str__()):
+        if not self.cmd_called(p_message, self.__str__()):
             return
 
-        if not self.hasPermission(self.permissionLevel, p_message.author.id):
+        if not self.has_permission(self.permissionLevel, p_message.author.id):
             return
 
         if HELP_COMMAND_PREFIX in p_message.content.lower():
-            await self.client.send_message(p_message.author, self.moreHelp())
+            await self.client.send_message(p_message.author, self.more_help())
             return
 
-
-        serverId = str(p_message.server.id)
+        server_id = str(p_message.server.id)
         if len(m_UserBDList) != 0:
             for channelBD in m_ChannelBDList:
-                if channelBD.serverId == serverId:
-                    comboList = []
+                if channelBD.serverId == server_id:
+                    combo_list = []
                     for userBd in m_UserBDList:
-                        if serverId == ObtainMemberInfo(self.client.get_all_members(), userBd.userId, "si", serverId):
-                            name = ObtainMemberInfo(self.client.get_all_members(), userBd.userId, "na", "")
-                            comboList.append([name, userBd.bd])
-                        if len(comboList) == 10:
-                            fullMessage = CodeFormat(tabulate.tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"), "")
-                            await self.client.send_message(p_message.author, fullMessage)
-                            del comboList[:]
-                    if len(comboList) != 0 or comboList is not None:
-                        fullMessage = CodeFormat(tabulate.tabulate(comboList, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"), "")
-                        await self.client.send_message(p_message.author, fullMessage)
-        else: 
+                        if server_id == obtain_member_info(self.client.get_all_members(), userBd.userId, "si",
+                                                           server_id):
+                            name = obtain_member_info(self.client.get_all_members(), userBd.userId, "na", "")
+                            combo_list.append([name, userBd.bd])
+                        if len(combo_list) == 10:
+                            full_message = code_format(
+                                tabulate.tabulate(combo_list, headers=["Name", "Birthday(mm-dd)"],
+                                                  tablefmt="fancy_grid"), "")
+                            await self.client.send_message(p_message.author, full_message)
+                            del combo_list[:]
+                    if len(combo_list) != 0 or combo_list is not None:
+                        full_message = code_format(
+                            tabulate.tabulate(combo_list, headers=["Name", "Birthday(mm-dd)"], tablefmt="fancy_grid"),
+                            "")
+                        await self.client.send_message(p_message.author, full_message)
+        else:
             await self.client.send_message(p_message.author, EMPTY_LIST)

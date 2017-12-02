@@ -1,50 +1,51 @@
 from util import *
 from cmdtemplate import Command
 
-class listAdminUser(Command):
+
+class Listadminuser(Command):
     """Lists every admin user."""
 
     isDisabled = False
     permissionLevel = PERM_LEVEL_OWNER
 
-    def getDoc(self):
+    def get_doc(self):
         return str(self.__class__.__doc__)
 
     def __str__(self):
         return str(self.__class__.__name__)
 
-    def moreHelp(self):
-       return MORE_HELP_LIST_ADMIN_USER.format(self.__str__())
+    def more_help(self):
+        return MORE_HELP_LIST_ADMIN_USER.format(self.__str__())
 
     async def command(self, p_message):
         """Actual Command"""
         if self.isDisabled:
             return
 
-        if not self.cmdCalled(p_message, self.__str__()):
+        if not self.cmd_called(p_message, self.__str__()):
             return
 
-        if not self.hasPermission(self.permissionLevel, p_message.author.id):
+        if not self.has_permission(self.permissionLevel, p_message.author.id):
             return
 
         if HELP_COMMAND_PREFIX in p_message.content.lower():
-            await self.client.send_message(p_message.author, self.moreHelp())
+            await self.client.send_message(p_message.author, self.more_help())
             return
 
-
-        serverId = str(p_message.server.id)
+        server_id = str(p_message.server.id)
         if len(m_AdminUserList) != 0:
-            comboList = []
+            combo_list = []
             for adminUser in m_AdminUserList:
-                if serverId == ObtainMemberInfo(self.client.get_all_members(), adminUser, "si", serverId):
-                    name = ObtainMemberInfo(self.client.get_all_members(), adminUser, "na", "")
-                    comboList.append([name])
-                if len(comboList) == 10:
-                    fullMessage = CodeFormat(tabulate.tabulate(comboList, headers=["Name"], tablefmt="fancy_grid"), "")
-                    await self.client.send_message(p_message.author, fullMessage)
-                    del comboList[:]
-            if len(comboList) != 0 or comboList is not None:
-                fullMessage = CodeFormat(tabulate.tabulate(comboList, headers=["Name"], tablefmt="fancy_grid"), "")
-                await self.client.send_message(p_message.author, fullMessage)
-        else: 
+                if server_id == obtain_member_info(self.client.get_all_members(), adminUser, "si", server_id):
+                    name = obtain_member_info(self.client.get_all_members(), adminUser, "na", "")
+                    combo_list.append([name])
+                if len(combo_list) == 10:
+                    full_message = code_format(tabulate.tabulate(combo_list, headers=["Name"], tablefmt="fancy_grid"),
+                                               "")
+                    await self.client.send_message(p_message.author, full_message)
+                    del combo_list[:]
+            if len(combo_list) != 0 or combo_list is not None:
+                full_message = code_format(tabulate.tabulate(combo_list, headers=["Name"], tablefmt="fancy_grid"), "")
+                await self.client.send_message(p_message.author, full_message)
+        else:
             await self.client.send_message(p_message.author, EMPTY_LIST)

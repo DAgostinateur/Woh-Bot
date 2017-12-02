@@ -1,40 +1,43 @@
 from util import *
 
-class Command():
+
+class Command:
     """A command template"""
 
-    isDisabled = True # Is the command disabled
+    isDisabled = True  # Is the command disabled
     permissionLevel = PERM_LEVEL_NONE
     cmdArguments = ""
     cmdDoc = ""
 
-    def moreHelp(self):
-       return MORE_HELP_DEFAULT
+    def more_help(self):
+        return MORE_HELP_DEFAULT
 
     def __init__(self, client):
         if False:
             client = discord.Client()
         self.client = client
 
-    def _getCmd(self, p_message, p_cmdName):
+    @staticmethod
+    def _get_cmd(p_message, p_cmd_name):
         """Returns the command from a
         message's content.
         
         Keyword arguments:
         p_message -- a Discord message
-        p_cmdName -- function name/command name"""
-        return p_message.content[:len("{0}{1}".format(PREFIX, p_cmdName))]
+        p_cmd_name -- function name/command name"""
+        return p_message.content[:len("{0}{1}".format(PREFIX, p_cmd_name))]
 
-    def _remCmd(self, p_message, p_cmdName):
+    @staticmethod
+    def _rem_cmd(p_message, p_cmd_name):
         """Returns the content of a message
         without the start of the command.
         
         Keyword arguments:
         p_message -- a Discord message
-        p_cmdName -- function name/command name"""
-        return p_message.content[len("{0}{1}".format(PREFIX, p_cmdName)):].lstrip()
+        p_cmd_name -- function name/command name"""
+        return p_message.content[len("{0}{1}".format(PREFIX, p_cmd_name)):].lstrip()
 
-    def cmdCalled(self, p_message, p_cmdName):
+    def cmd_called(self, p_message, p_cmd_name):
         """Returns True if the message's command
         is equivalent to a command name, ignoring
         character case.
@@ -42,22 +45,23 @@ class Command():
         
         Keyword arguments:
         p_message -- a Discord message
-        p_cmdName -- function name/command name"""
-        msgCmd = self._getCmd(p_message, p_cmdName)
-        cmd = "{0}{1}".format(PREFIX, p_cmdName)
-        if msgCmd.lower() == cmd.lower():
+        p_cmd_name -- function name/command name"""
+        msg_cmd = self._get_cmd(p_message, p_cmd_name)
+        cmd = "{0}{1}".format(PREFIX, p_cmd_name)
+        if msg_cmd.lower() == cmd.lower():
             return True
         return False
 
-    def hasPermission(self, permissions, userId):
+    @staticmethod
+    def has_permission(permissions, user_id):
         """Returns True if the user has
         permission to use the command.
         Returns False otherwise.
 
         Keyword arguments:
         permissions -- permission level
-        userId      -- a user id
-        
+        user_id      -- a user id
+
         Permission Levels:
         normal - Everyone has access
         admin  - Admins and I have access
@@ -65,10 +69,10 @@ class Command():
         if permissions == PERM_LEVEL_NORMAL:
             return True
         elif permissions == PERM_LEVEL_ADMIN:
-            if IsAdminUser(m_AdminUserList, userId) or IsMe(userId):
+            if is_admin_user(m_AdminUserList, user_id) or is_me(user_id):
                 return True
         elif permissions == PERM_LEVEL_OWNER:
-            if IsMe(userId):
+            if is_me(user_id):
                 return True
         else:
             return False

@@ -1,102 +1,86 @@
 from util import *
-from commands.addAdminUser import addAdminUser
-from commands.addChannelBD import addChannelBD
-from commands.addUserBD import addUserBD
-from commands.city import city
-from commands.listAdminUser import listAdminUser
-from commands.listAllUserBD import listAllUserBD
-from commands.listEmojis import listEmojis
-from commands.listUserBD import listUserBD
-from commands.openTV import openTV
-from commands.react import react
-from commands.removeAdminUser import removeAdminUser
-from commands.removeChannelBD import removeChannelBD
-from commands.removeUserBD import removeUserBD
-from commands.setPresence import setPresence
-from commands.showChannelBD import showChannelBD
-from commands.town import town
-from commands.woh import woh
+from commands.Addadminuser import Addadminuser
+from commands.Addchannelbd import Addchannelbd
+from commands.Adduserbd import Adduserbd
+from commands.City import City
+from commands.Listadminuser import Listadminuser
+from commands.Listalluserbd import Listalluserbd
+from commands.Listemojis import Listemojis
+from commands.Listuserbd import Listuserbd
+from commands.Opentv import Opentv
+from commands.React import React
+from commands.Removeadminuser import Removeadminuser
+from commands.Removechannelbd import Removechannelbd
+from commands.Removeuserbd import Removeuserbd
+from commands.Setpresence import Setpresence
+from commands.Showchannelbd import Showchannelbd
+from commands.Town import Town
+from commands.Woh import Woh
 
-def _commandList(p_client):
-   cmdList = []
 
-   cmdList.append(addAdminUser(p_client))
-   cmdList.append(addChannelBD(p_client))
-   cmdList.append(addUserBD(p_client))
-   cmdList.append(city(p_client))
-   cmdList.append(listAdminUser(p_client))
-   cmdList.append(listAllUserBD(p_client))
-   cmdList.append(listEmojis(p_client))
-   cmdList.append(listUserBD(p_client))
-   cmdList.append(openTV(p_client))
-   cmdList.append(react(p_client))
-   cmdList.append(removeAdminUser(p_client))
-   cmdList.append(removeChannelBD(p_client))
-   cmdList.append(removeUserBD(p_client))
-   cmdList.append(setPresence(p_client))
-   cmdList.append(showChannelBD(p_client))
-   cmdList.append(town(p_client))
-   cmdList.append(woh(p_client))
-   
-   return cmdList
+def _command_list(p_client):
+    cmd_list = [Addadminuser(p_client), Addchannelbd(p_client), Adduserbd(p_client), City(p_client),
+                Listadminuser(p_client), Listalluserbd(p_client), Listemojis(p_client), Listuserbd(p_client),
+                Opentv(p_client), React(p_client), Removeadminuser(p_client), Removechannelbd(p_client),
+                Removeuserbd(p_client), Setpresence(p_client), Showchannelbd(p_client), Town(p_client), Woh(p_client)]
 
-class WCommand():
+    return cmd_list
+
+
+class WCommand:
     """Class that contains every command Woh Bot has."""
+
     def __init__(self, client):
         """Keyword arguments:
         client -- discord.Client()"""
         self.client = client
-        self.commands = _commandList(client)
+        self.commands = _command_list(client)
 
-
-    async def commandChecker(self, p_message):
+    async def command_checker(self, p_message):
         for command in self.commands:
             await command.command(p_message)
 
-
-    def normalMessage(self):
-        normalList = []
+    def normal_message(self):
+        normal_list = []
         message = NORMAL_MESSAGE_START.format(PREFIX)
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_NORMAL:
-                cmdStr = "{0}{1}".format(command.__str__(), command.cmdArguments)
-                doc = command.getDoc()
-                cmdDes = doc.format(command.cmdDoc)
-                normalList.append([cmdStr, cmdDes])
+                cmd_str = "{0}{1}".format(command.__str__(), command.cmdArguments)
+                doc = command.get_doc()
+                cmd_des = doc.format(command.cmdDoc)
+                normal_list.append([cmd_str, cmd_des])
 
-        message += tabulate.tabulate(normalList, headers=["Command", "Description"], tablefmt="simple")
-        finalMsg = CodeFormat(message, "")
-        return finalMsg
-    
+        message += tabulate.tabulate(normal_list, headers=["Command", "Description"], tablefmt="simple")
+        final_msg = code_format(message, "")
+        return final_msg
 
-    def adminMessage(self):
-        adminList = []
+    def admin_message(self):
+        admin_list = []
         message = ADMIN_MESSAGE_START
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_ADMIN:
-                cmdStr = "{0}{1}".format(command.__str__(), command.cmdArguments)
-                doc = command.getDoc()
-                cmdDes = doc.format(command.cmdDoc)
-                adminList.append([cmdStr, cmdDes])
+                cmd_str = "{0}{1}".format(command.__str__(), command.cmdArguments)
+                doc = command.get_doc()
+                cmd_des = doc.format(command.cmdDoc)
+                admin_list.append([cmd_str, cmd_des])
 
-        message += tabulate.tabulate(adminList, headers=["Command", "Description"], tablefmt="simple")
-        finalMsg = CodeFormat(message, "")
-        return finalMsg
+        message += tabulate.tabulate(admin_list, headers=["Command", "Description"], tablefmt="simple")
+        final_msg = code_format(message, "")
+        return final_msg
 
-
-    def ownerMessage(self):
-        ownerList = []
+    def owner_message(self):
+        owner_list = []
         message = OWNER_MESSAGE_START
 
         for command in self.commands:
             if command.permissionLevel == PERM_LEVEL_OWNER:
-                cmdStr = "{0}{1}".format(command.__str__(), command.cmdArguments)
-                doc = command.getDoc()
-                cmdDes = doc.format(command.cmdDoc)
-                ownerList.append([cmdStr, cmdDes])
+                cmd_str = "{0}{1}".format(command.__str__(), command.cmdArguments)
+                doc = command.get_doc()
+                cmd_des = doc.format(command.cmdDoc)
+                owner_list.append([cmd_str, cmd_des])
 
-        message += tabulate.tabulate(ownerList, headers=["Command", "Description"], tablefmt="simple")
-        finalMsg = CodeFormat(message, "")
-        return finalMsg
+        message += tabulate.tabulate(owner_list, headers=["Command", "Description"], tablefmt="simple")
+        final_msg = code_format(message, "")
+        return final_msg
