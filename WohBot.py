@@ -25,7 +25,6 @@ from features import birthdayMessages
 # - Custom prefix for every server.
 # - Optimization.
 # - Music
-# - Make everything easier to read/PEP8.
 # - Maybe some sort of game:
 #           Incremental game for my bot where the entire server participates in passively or actively.
 
@@ -68,7 +67,13 @@ async def on_reaction_add(reaction, user):
     if user == client.user:
         return
 
-    if reaction.emoji == obtain_emoji_with_name(client.get_all_emojis(), "woh"):
+    emoji = ""
+    try:
+        emoji = obtain_emoji_with_name(client.get_all_emojis(), "woh")
+    except EmojiNameNonExistent:
+        pass
+
+    if reaction.emoji == emoji:
         await client.add_reaction(reaction.message, reaction.emoji)
 
 
@@ -80,11 +85,12 @@ async def on_message(message):
     if message.author == client.user:  # This prevents the bot from responding to itself
         return
 
-    # WOH REACTION_START
     if "woh" in message.content.lower():
-        await client.add_reaction(message, obtain_emoji_with_name(client.get_all_emojis(), "woh"))
-    # WOH REACTION_END
-
+        try:
+            await client.add_reaction(message, obtain_emoji_with_name(client.get_all_emojis(), "woh"))
+        except EmojiNameNonExistent:
+            # I'm not sending any messages to alert myself, it would be very spammy
+            pass
     await wCommand.command_checker(message)
 
 

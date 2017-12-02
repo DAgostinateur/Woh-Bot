@@ -32,3 +32,7 @@ class AdminUser(list):  # Will be used in the future
         super().__init__()
         self.userId = user_id
         self.serverId = server_id
+
+
+class EmojiNameNonExistent(Exception):
+    pass

@@ -43,7 +43,7 @@ class React(Command):
 
         try:
             emoji = obtain_emoji_with_name(self.client.get_all_emojis(), emoji_name)
-        except Exception:
+        except EmojiNameNonExistent:
             await self.client.delete_message(p_message)
             return
 

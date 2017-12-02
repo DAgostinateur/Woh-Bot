@@ -35,7 +35,7 @@ class Removechannelbd(Command):
         list_index = 0
         for channelBD in m_ChannelBDList:
             if channelBD.serverId == p_message.server.id:
-                jsonCollection.file_remove_channel_bd(m_ChannelBDList, list_index)
+                file_remove_channel_bd(m_ChannelBDList, list_index)
                 await self.client.send_message(p_message.channel, REMOVE_CHANNEL_BD_SUCCESS)
                 return
             list_index += 1

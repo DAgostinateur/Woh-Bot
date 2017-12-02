@@ -6,7 +6,14 @@ from util import *
 
 def happy_birthday_message(p_client, p_mm_dd: str, p_server_id: str):
     bd_message = ""
-    happy_b = HAPPY_BIRTHDAY_START.format(obtain_emoji_with_name(p_client.get_all_emojis(), "woh"))
+
+    emoji = ":birthday:"
+    try:
+        emoji = obtain_emoji_with_name(p_client.get_all_emojis(), "woh")
+    except EmojiNameNonExistent:
+        pass
+
+    happy_b = HAPPY_BIRTHDAY_START.format(emoji)
     user_bd_today = []
 
     # Checking the date and checking the user's server, then adding him/her to user_bd_today[]:

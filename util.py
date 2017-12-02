@@ -19,7 +19,7 @@ from inspect import stack
 from datetime import datetime
 from hidden import *  # Things I don't want seen by the public.
 from constants import *
-import jsonCollection
+from jsonCollection import *
 
 
 def myself():
@@ -109,7 +109,7 @@ def obtain_emoji_with_name(p_emoji_list, p_name: str):
     for emoji in p_emoji_list:
         if emoji.name.lower() == p_name.lower():
             return emoji
-    return "octagonal_sign"  # If the bot ever uses this, that means I typed the name wrong
+    raise EmojiNameNonExistent()
 
 
 def obtain_channel_info(p_channel_list, p_id: str, p_mode="ch"):
@@ -246,7 +246,7 @@ def extract_info(p_client, p_wcommand):
     for server in p_client.servers:
         m_ServerList.append(server)  # Gets every Server
 
-    jsonCollection.file_extract_user_bd(m_UserBDList)  # Gets every UserBd from FileNameUserBD()
-    jsonCollection.file_extract_channel_bd(m_ChannelBDList)  # Gets every ChannelBd from FileNameChannelBD()
-    jsonCollection.file_extract_admin_user(m_AdminUserList)  # Gets every AdminUser from FileNameAdminUser()
+    file_extract_user_bd(m_UserBDList)  # Gets every UserBd from FileNameUserBD()
+    file_extract_channel_bd(m_ChannelBDList)  # Gets every ChannelBd from FileNameChannelBD()
+    file_extract_admin_user(m_AdminUserList)  # Gets every AdminUser from FileNameAdminUser()
     print(JSON_COLLECTION_MESSAGE)

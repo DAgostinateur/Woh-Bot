@@ -46,5 +46,5 @@ class Adduserbd(Command):
             await self.client.send_message(p_message.channel, INVALID_DATE)
             return
 
-        jsonCollection.file_add_user_bd(m_UserBDList, user_id, bd)
+        file_add_user_bd(m_UserBDList, user_id, bd)
         await self.client.send_message(p_message.channel, ADD_USER_BD_SUCCESS)

@@ -36,7 +36,7 @@ class Removeuserbd(Command):
         list_index = 0
         for userBd in m_UserBDList:
             if userBd.userId == user_id:
-                jsonCollection.file_remove_user_bd(m_UserBDList, list_index)
+                file_remove_user_bd(m_UserBDList, list_index)
                 await self.client.send_message(p_message.channel, REMOVE_USER_BD_SUCCESS)
                 return
             list_index += 1
